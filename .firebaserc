@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "bank-ruble": {
+      "hosting": {
+        "Bank_ruble": [
+          "bank-ruble"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "bank-ruble"
+  }
+}

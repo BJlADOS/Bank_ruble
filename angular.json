@@ -103,6 +103,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "Bank_ruble:build:production",
+            "firebaseProject": "bank-ruble",
+            "firebaseHostingSite": "bank-ruble"
+          }
         }
       }
     }

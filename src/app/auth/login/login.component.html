@@ -1,0 +1,79 @@
+<p>login works!</p>
+<div *ngIf="this.actualState === 'sign-up'" class="Form">
+    <h3>Sign Up</h3>
+    <form [formGroup]="signUpForm" (submit)="signUp()">
+        <label class="control-name">Email</label>
+        <input id="email" formControlName="email" type="email" class="form-control">
+        <label
+            class="text-danger"
+            *ngIf="signUpForm.controls['email'].hasError('email')"
+        >
+            Enter a valid email address!
+        </label>
+        <label
+        class="text-danger"
+        *ngIf="signUpForm.controls['email'].hasError('required')"
+        >
+            Enter an email address!
+        </label>
+        <label class="control-name">Password</label>
+        <input id="password" formControlName="password" type="password" class="form-control">
+        <label
+        class="text-danger"
+        *ngIf="signUpForm.controls['password'].hasError('hasNumber')"
+        >
+            Must have at least 1 number!
+        </label>
+        <label
+        class="text-danger"
+        *ngIf="signUpForm.controls['password'].hasError('hasCapitalCase')"
+        >
+            Must have CapitalCase!
+        </label>
+        <label
+        class="text-danger"
+        *ngIf="signUpForm.controls['password'].hasError('hasSmallCase')"
+        >
+            Must have SmallCase
+        </label>
+        <label
+        class="text-danger"
+        *ngIf="signUpForm.controls['password'].hasError('hasSpecialCharacters')"
+        >
+            Must have hasSpecialCharacters
+        </label>
+        <label
+        class="text-danger"
+        *ngIf="signUpForm.controls['password'].hasError('minlength')"
+        >
+            Must be at least 8 characters!
+        </label>
+        <label class="control-name">Confirm Password</label>
+        <input id="confirmPassword" formControlName="confirmPassword" type="password" class="form-control">
+        <label
+        class="text-danger"
+        *ngIf="signUpForm.hasError('NoPassswordMatch')"
+        >
+            passwords must match
+        </label>
+        <input type="submit" value="submit" [disabled]="signUpForm.invalid">
+    </form>
+    <i (click)="actualState = 'sign-in'">Back</i>
+</div>
+<div *ngIf="this.actualState === 'sign-in'" class="Form">
+    <h3>Sign In</h3>
+    <form [formGroup]="signInForm" (submit)="signIn()">
+    <label class="control-name">Email</label>
+    <input id="email" formControlName="email" type="email" class="form-control">
+    <label
+        class="text-danger"
+        *ngIf="signInForm.controls['email'].hasError('email')"
+    >
+        Enter a valid email address!
+    </label>
+    <label class="control-name">Password</label>
+        <input id="password" formControlName="password" type="password" class="form-control">
+    <input type="submit" value="submit" [disabled]="signInForm.invalid">
+    </form>
+    <i (click)="actualState = 'sign-up'">Don't have an account? Register</i>
+</div>

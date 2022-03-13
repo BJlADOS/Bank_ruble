@@ -1,0 +1,68 @@
+.control-name {
+    display: inline-block;
+    padding: 4px 2px;
+}
+
+.text-danger {
+    display: block;
+    background-color: #dd3a3a;
+    border-radius: 5px;
+    padding: 6px 3px;
+    margin: 8px 0;
+}
+
+input[type=email] {
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 4px 8px;
+    display: inline-block;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+input[type=password] {
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 4px 8px;
+    display: inline-block;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    margin-top: 16px;
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: large;
+}
+  
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+  
+div {
+    border-radius: 5px;
+    background-color: #d4d2d2;
+    padding: 10px;
+}
+.ng-invalid:not(form)  {
+    border: 3px solid #a94442; /* red */
+}
+.ng-valid:not(form) {
+    border: 3px solid #16b31e;
+}
+
+i:hover {
+    color: #5b0fe7;
+    cursor: pointer;
+}
+
+i {
+    display: block;
+    margin-top: 10px;
+}

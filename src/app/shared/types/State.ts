@@ -1,0 +1,1 @@
+export type State = 'sign-in' | 'sign-up' | 'forgot-password' | 'verify-email';

@@ -113,9 +113,21 @@
             "firebaseProject": "bank-ruble",
             "firebaseHostingSite": "bank-ruble"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
-  "defaultProject": "Bank_ruble"
+  "defaultProject": "Bank_ruble",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }

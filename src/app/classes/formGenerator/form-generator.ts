@@ -55,4 +55,15 @@ export class FormGenerator {
             }
         );
     }
+
+    public getForgotPasswordForm(): FormGroup {
+        return this._fb.group(        
+            {   
+                email: [null, Validators.compose([
+                    Validators.email, 
+                    Validators.required,
+                ])],
+            }
+        );
+    }
 }

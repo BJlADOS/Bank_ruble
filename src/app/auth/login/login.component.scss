@@ -11,6 +11,14 @@
     margin: 8px 0;
 }
 
+.text-success {
+    display: block;
+    background-color: #0bc047;
+    border-radius: 5px;
+    padding: 6px 3px;
+    margin: 8px 0;
+}
+
 input[type=email] {
     width: 100%;
     margin-bottom: 8px;
@@ -39,10 +47,16 @@ input[type=submit] {
     border-radius: 4px;
     cursor: pointer;
     font-size: large;
-}
-  
-input[type=submit]:hover {
-    background-color: #45a049;
+    &:disabled {
+        background-color: #606360;
+        cursor: default;
+        &:hover {
+            background-color: #606360;
+        }
+    }
+    &:hover {
+        background-color: #45a049;
+    }
 }
   
 div {
@@ -57,12 +71,12 @@ div {
     border: 3px solid #16b31e;
 }
 
-i:hover {
-    color: #5b0fe7;
-    cursor: pointer;
-}
-
 i {
     display: block;
     margin-top: 10px;
+    &:hover {
+        color: #5b0fe7;
+        cursor: pointer;
+    }
 }
+

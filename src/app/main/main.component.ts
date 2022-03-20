@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Auth, User } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,17 +9,23 @@ import { Router } from '@angular/router';
 })
 export class MainComponent implements OnInit {
 
-    constructor(
-        public router: Router
-    ) { }
+    public userName: string = 'Войти';
 
-    public ngOnInit(): void {
-        let a: number = 1;
-        a = 2; //затычка
+    constructor(
+        public router: Router,
+        private _auth: Auth
+    ) { 
     }
 
-    // signIn(): void {
-    //     debugger;
-    //     this.router.navigate(['/login'], {queryParams: {actualState: 'sign-in'}});
-    // }
+    public ngOnInit(): void {
+        this._auth.onAuthStateChanged((user: User | null): void => {
+            if(user?.displayName) {
+                this.userName = user!.displayName as string;
+            }
+            else if (user) {
+                this.userName = 'Пользователь';
+            }
+        });
+    }
+
 }

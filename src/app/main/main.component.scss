@@ -1,0 +1,37 @@
+.main__head {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 8px;
+    width: 100%;
+
+    &__logo {
+        height: 100%;
+    }
+    &__container {
+
+        &__top-outlet {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+    
+            &__login {
+                background-color: #2e1dc9;
+                width: fit-content;
+                color: white;
+                padding: 5px 15px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: large;
+                &:hover {
+                    background-color: #4617f0;
+                }
+            }
+        }
+    
+        &__bottom-outlet {
+    
+            width: 100%;
+        }
+    }
+}

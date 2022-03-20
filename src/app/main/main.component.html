@@ -1,2 +1,18 @@
-<p>main works!</p>
-<button [routerLink]="['/login']" [queryParams]="{actualState: 'sign-in'}">Login</button>
+<div class="main__head">
+    <div class="main__head__logo">
+        hello
+    </div>
+    <div class="main__head__container">
+        <div class="main__head__container__top-outlet">
+            <button class='main__head__container__top-outlet__login' [routerLink]="['/login']" [queryParams]="{actualState: 'sign-in'}">{{ userName }}</button>       
+        </div>
+        <div class="main__head__container__bottom-outlet">
+            <button>but</button>
+            <button>but</button>
+            <button>but</button>
+            <button>but</button>
+            
+        </div>
+    </div>
+
+</div>

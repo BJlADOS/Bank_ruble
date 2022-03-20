@@ -1,1 +1,1 @@
-export type State = 'sign-in' | 'sign-up' | 'forgot-password' | 'verify-email';
+export type State = 'sign-in' | 'sign-up' | 'forgot-password' | 'forgot-password';

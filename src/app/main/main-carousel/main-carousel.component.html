@@ -1,0 +1,25 @@
+<div class="main__carousel">
+    <button (click)="previous()" class="main__carousel__arrow left"><svg xmlns="http://www.w3.org/2000/svg"
+            height="24px" viewBox="0 0 24 24" width="24px">
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z" />
+        </svg></button>
+    <div class="main__carousel__gallery" [ngStyle]="{'width': images.length * 100 + '%'}"
+        (change)="updateCarousel($event)">
+        <input *ngFor="let img of images; let i = index" type="radio" name="r" [id]="'r' + i">
+        <div class="main__carousel__gallery__slide" *ngFor="let img of images; let i = index"
+            [ngStyle]="{'width': 100/images.length + '%'}" [id]="'i' + i">
+            <img [src]="img.src">
+        </div>
+
+    </div>
+    <div class="main__carousel__navigation">
+        <label *ngFor="let img of images; let i = index" [for]="'r' + i" class="main__carousel__navigation__bar"
+            [id]="'b' + i"></label>
+    </div>
+    <button (click)="next()" class="main__carousel__arrow right"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+            viewBox="0 0 24 24" width="24px">
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path d="M10.02 6L8.61 7.41 13.19 12l-4.58 4.59L10.02 18l6-6-6-6z" />
+        </svg></button>
+</div>

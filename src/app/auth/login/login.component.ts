@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { FormGroup } from '@angular/forms';
@@ -11,7 +12,15 @@ import { State } from 'src/app/shared/types/State';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss']
+    styleUrls: ['./login.component.scss'],
+    animations: [
+        trigger('textAppears', [
+            transition('void=>*', [
+                style({ opacity: 0 }),
+                animate('.5s', style({ opacity: 1 }))
+            ])
+        ])
+    ]
 })
 export class LoginComponent implements OnInit {
     public actualState!: State;
@@ -32,10 +41,10 @@ export class LoginComponent implements OnInit {
     }
 
     public ngOnInit(): void {
+        this.updateRoute('sign-in');
         this.route.queryParams.pipe(filter((params: Params) => params['actualState'])).subscribe((params: Params): void => {
             this.actualState = params['actualState'];
         });
-        this._router.navigate(['/login'], { queryParams: { actualState: 'sign-in' } });
     }
 
     public signUp(): void {
@@ -44,7 +53,7 @@ export class LoginComponent implements OnInit {
         this._auth.register(email, password).then(() => {
             this._auth.sendEmailVerification();
             this.signUpError.state = false;
-            this.actualState = 'sign-in';
+            this.updateRoute('sign-in');
         }).catch((error: Error): void => {
             this.signUpError.state = true;
             this.signUpError.message = 'Невозможно зарегистрировать аккаунт на данный email';
@@ -80,31 +89,20 @@ export class LoginComponent implements OnInit {
                 this.forgotPasswordEmailSent = false;
                 this.forgotPasswordError.message = /\d{1}:\d{2}/.test(error.message)? `Подождите ещё ${error.message}` : 'Пользователя с таким email не существует';
             });
-        // .pipe(delay(5000))
-        // .subscribe((promise: Promise<void>): void => {
-        //     promise.then(() => {
-        //         this.forgotPasswordError.state = false;
-        //         this.forgotPasswordEmailSent = true;
-        //     }).catch((error: Error): void => {
-        //         this.forgotPasswordError.state = true;
-        //         this.forgotPasswordEmailSent = false;
-        //         this.forgotPasswordError.message = 'Пользователя с таким email не существует';
-        //     });
-        // });
     }
 
     public getBackToSignIn(): void {
-        this.actualState = 'sign-in';
+        this.updateRoute('sign-in');
         this.resetForms();
     }
 
     public toSignUp(): void {
-        this.actualState = 'sign-up';
+        this.updateRoute('sign-up');
         this.resetForms();
     }
 
     public toForgotPassword(): void {
-        this.actualState = 'forgot-password';
+        this.updateRoute('forgot-password');
         this.resetForms();
     }
 
@@ -112,5 +110,14 @@ export class LoginComponent implements OnInit {
         this.signInForm.reset();
         this.signUpForm.reset();
         this.forgotPasswordForm.reset();
+    }
+
+    
+    private updateRoute(state: State): void {
+        this._router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { actualState: state },
+            queryParamsHandling: 'merge'
+        });
     }
 }

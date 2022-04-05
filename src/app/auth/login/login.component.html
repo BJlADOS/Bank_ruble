@@ -1,17 +1,17 @@
-<ng-container *ngIf="this.actualState === 'sign-up'" class="Form">
+<div *ngIf="this.actualState === 'sign-up'" class="Form">
     <h3>Sign Up</h3>
     <form [formGroup]="signUpForm" (submit)="signUp()">
         <label class="control-name">Email</label>
         <input id="email" formControlName="email" type="email" class="form-control">
         <label
             class="text-danger"
-            *ngIf="signUpForm.controls['email'].hasError('email')"
+            *ngIf="signUpForm.controls['email'].hasError('email')" @textAppears
         >
             Enter a valid email address!
         </label>
         <label
         class="text-danger"
-        *ngIf="signUpForm.controls['email'].hasError('required')"
+        *ngIf="signUpForm.controls['email'].hasError('required')" @textAppears
         >
             Enter an email address!
         </label>
@@ -19,31 +19,31 @@
         <input id="password" formControlName="password" type="password" class="form-control">
         <label
         class="text-danger"
-        *ngIf="signUpForm.controls['password'].hasError('hasNumber')"
+        *ngIf="signUpForm.controls['password'].hasError('hasNumber')" @textAppears
         >
             Must have at least 1 number!
         </label>
         <label
         class="text-danger"
-        *ngIf="signUpForm.controls['password'].hasError('hasCapitalCase')"
+        *ngIf="signUpForm.controls['password'].hasError('hasCapitalCase')" @textAppears
         >
             Must have CapitalCase!
         </label>
         <label
         class="text-danger"
-        *ngIf="signUpForm.controls['password'].hasError('hasSmallCase')"
+        *ngIf="signUpForm.controls['password'].hasError('hasSmallCase')" @textAppears
         >
             Must have SmallCase
         </label>
         <label
         class="text-danger"
-        *ngIf="signUpForm.controls['password'].hasError('hasSpecialCharacters')"
+        *ngIf="signUpForm.controls['password'].hasError('hasSpecialCharacters')" @textAppears
         >
             Must have hasSpecialCharacters
         </label>
         <label
         class="text-danger"
-        *ngIf="signUpForm.controls['password'].hasError('minlength')"
+        *ngIf="signUpForm.controls['password'].hasError('minlength')" @textAppears
         >
             Must be at least 8 characters!
         </label>
@@ -51,7 +51,7 @@
         <input id="confirmPassword" formControlName="confirmPassword" type="password" class="form-control">
         <label
         class="text-danger"
-        *ngIf="signUpForm.hasError('NoPassswordMatch')"
+        *ngIf="signUpForm.hasError('NoPassswordMatch')" @textAppears
         >
             Passwords must match
         </label>
@@ -64,15 +64,15 @@
         {{signUpError.message}}
     </label>
     <i (click)="getBackToSignIn()">Back</i>
-</ng-container>
-<ng-container *ngIf="this.actualState === 'sign-in'" class="Form">
+</div>
+<div *ngIf="this.actualState === 'sign-in'" class="Form">
     <h3>Sign In</h3>
     <form [formGroup]="signInForm" (submit)="signIn()">
     <label class="control-name">Email</label>
     <input id="email" formControlName="email" type="email" class="form-control">
     <label
         class="text-danger"
-        *ngIf="signInForm.controls['email'].hasError('email')"
+        *ngIf="signInForm.controls['email'].hasError('email')" @textAppears
     >
         Enter a valid email address!
     </label>
@@ -88,15 +88,15 @@
     </label>
     <i (click)="toSignUp()">Don't have an account? Register</i>
     <i (click)="toForgotPassword()">Forgot password?</i>
-</ng-container>
-<ng-container *ngIf="this.actualState === 'forgot-password'" class="Form">
+</div>
+<div *ngIf="this.actualState === 'forgot-password'" class="Form">
     <h3>Reset Password</h3>
     <form [formGroup]="forgotPasswordForm" (submit)="forgotPassword()">
     <label class="control-name">Email</label>
     <input id="email" formControlName="email" type="email" class="form-control">
     <label
         class="text-danger"
-        *ngIf="signInForm.controls['email'].hasError('email')"
+        *ngIf="forgotPasswordForm.controls['email'].hasError('email')" @textAppears
     >
         Enter a valid email address!
     </label>
@@ -115,4 +115,4 @@
         Сообщение для сброса пароля отправлено на ваш email.
     </label>
     <i (click)="getBackToSignIn()">Back</i>
-</ng-container>
+</div>

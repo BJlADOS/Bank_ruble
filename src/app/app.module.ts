@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { routing } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -32,6 +33,7 @@ import { AccountComponent } from './account/account.component';
         provideAuth(() => getAuth()),
         provideDatabase(() => getDatabase()),
         ReactiveFormsModule,
+        BrowserAnimationsModule,
     ],
     providers: [
     ],

@@ -10,7 +10,7 @@ const redirectLoggedInToAccount = (): AuthPipe => redirectLoggedInTo('/account')
 
 const routes: Routes = [
     { path: '', redirectTo: '/main', pathMatch: 'full' },
-    { path: 'main', loadChildren: () => import('./main/main.module').then((m: typeof import('c:/Users/User/Desktop/Bank_ruble/src/app/main/main.module')): typeof MainModule => m.MainModule) },
+    { path: 'main', loadChildren: () => import('./main/main.module').then((m: typeof import('./main/main.module')): typeof MainModule => m.MainModule) },
     { path: 'login', component: LoginComponent, canActivate: [AuthGuard], data: { authGuardPipe: redirectLoggedInToAccount } },
     { path: 'account', component: AccountComponent, canActivate: [AuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
 ];

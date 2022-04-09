@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { images } from 'src/assets/img/carousel/images';
 @Component({
     selector: 'app-main-carousel',
@@ -14,7 +14,7 @@ import { images } from 'src/assets/img/carousel/images';
         ])
     ]
 })
-export class MainCarouselComponent implements OnInit, AfterViewInit {
+export class MainCarouselComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public images!: Array<{src: string}>;
     public currentIndex: number = 0;
@@ -23,8 +23,14 @@ export class MainCarouselComponent implements OnInit, AfterViewInit {
 
     private _carouselTimer!: NodeJS.Timeout;
     private _callback!: () => void;
+
     constructor() { 
     }
+
+    public ngOnDestroy(): void {
+        clearTimeout(this._carouselTimer);
+    }
+    
     public ngAfterViewInit(): void {
         document.getElementById(`i${this.currentIndex}`)!.classList.add('im1');
         const rad: HTMLInputElement | null = document.getElementById(`r${this.currentIndex}`) as HTMLInputElement;
@@ -35,10 +41,10 @@ export class MainCarouselComponent implements OnInit, AfterViewInit {
 
     public ngOnInit(): void {
         this.images = images;
-        this._callback = (): void => this.next();
+        this._callback = (): void => this.moveToNextSlide();
     }
 
-    public next(): void {
+    public moveToNextSlide(): void {
         if (this.currentIndex === images.length - 1) {
             this.currentIndex = 0;
         } else {
@@ -49,7 +55,7 @@ export class MainCarouselComponent implements OnInit, AfterViewInit {
         this.updateBar();
     }
 
-    public previous(): void {
+    public moveToPreviousSlide(): void {
         if (this.currentIndex === 0) {
             this.currentIndex = images.length - 1;
         } else {

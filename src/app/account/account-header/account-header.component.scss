@@ -1,0 +1,59 @@
+.account__head {
+    max-width: 1200px;
+    max-height: 100px;
+    margin: 0 auto;
+    display: flex;
+    padding: 15px;
+    gap: 20px;
+    img {
+        cursor: pointer;
+        max-height: 70px;
+        max-width: 100%;
+        object-fit: contain;
+    }
+    &__container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    &__container-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        &__top-outlet {
+            margin-bottom: 8px;
+            width: 100%;
+            display: flex;
+            flex-direction: flex-end;
+        }
+        
+        &__bottom-outlet {
+            margin-bottom: 8px;
+            width: 100%;
+            display: flex;
+            flex-direction: flex-end;
+        }
+
+        &__logout {
+            background-color: #ca0303;
+            width: fit-content;
+            color: white;
+            padding: 5px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: large;
+            &:hover {
+                background-color: #7a0606;
+            }
+        }
+    }
+}
+.wrapper {
+    background: rgb(255, 255, 255);
+    box-shadow: 0 1px 24px 0 rgb(0 0 0 / 14%);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}

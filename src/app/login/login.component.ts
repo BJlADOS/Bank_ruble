@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.updateRoute('sign-in');
+        this.updateRoute('Вход');
         this.route.queryParams.pipe(filter((params: Params) => params['actualState'])).subscribe((params: Params): void => {
             this.actualState = params['actualState'];
         });
@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
         this._auth.register(email, password).then(() => {
             this._auth.sendEmailVerification();
             this.signUpError.state = false;
-            this.updateRoute('sign-in');
+            this._router.navigate(['/account']);
         }).catch((error: Error): void => {
             this.signUpError.state = true;
             this.signUpError.message = 'Невозможно зарегистрировать аккаунт на данный email';
@@ -92,17 +92,17 @@ export class LoginComponent implements OnInit {
     }
 
     public getBackToSignIn(): void {
-        this.updateRoute('sign-in');
+        this.updateRoute('Вход');
         this.resetForms();
     }
 
     public toSignUp(): void {
-        this.updateRoute('sign-up');
+        this.updateRoute('Регистрация');
         this.resetForms();
     }
 
     public toForgotPassword(): void {
-        this.updateRoute('forgot-password');
+        this.updateRoute('Забыли пароль');
         this.resetForms();
     }
 

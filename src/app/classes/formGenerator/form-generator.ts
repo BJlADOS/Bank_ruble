@@ -31,7 +31,7 @@ export class FormGenerator {
                     CustomValidators.patternValidator(/\d/, { hasNumber: true }),
                     CustomValidators.patternValidator(/[A-Z]/, { hasCapitalCase: true }),
                     CustomValidators.patternValidator(/[a-z]/, { hasSmallCase: true }),
-                    CustomValidators.patternValidator(/[ [!@#$%^&*()_+-=[]/, { hasSpecialCharacters: true }),
+                    CustomValidators.patternValidator(/[!@#$%^&*()_+/\-=[\]]+/, { hasSpecialCharacters: true }),
                     Validators.minLength(8)
                 ])],
                 confirmPassword: [null, Validators.compose([Validators.required])]

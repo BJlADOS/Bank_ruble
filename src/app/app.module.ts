@@ -12,17 +12,16 @@ import { environment } from '../environments/environment';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideDatabase,getDatabase } from '@angular/fire/database';
 //end
-import { LoginComponent } from './auth/login/login.component';
+import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputCheckDirective } from './Directives/inputCheck/input-check.directive';
-import { AccountComponent } from './account/account.component';
+
 
 @NgModule({
     declarations: [
         AppComponent,
         LoginComponent,
         InputCheckDirective,
-        AccountComponent,
     ],
     imports: [
         BrowserModule,

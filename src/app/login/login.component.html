@@ -1,5 +1,6 @@
-<div *ngIf="this.actualState === 'sign-up'" class="Form">
-    <h3>Sign Up</h3>
+<div class="wrapper">
+    <div class="header"><h3>{{actualState}}</h3><button [routerLink]="['/main']">На главную</button></div>
+<div *ngIf="this.actualState === 'Регистрация'" class="Form">
     <form [formGroup]="signUpForm" (submit)="signUp()">
         <label class="control-name">Email</label>
         <input id="email" formControlName="email" type="email" class="form-control">
@@ -7,55 +8,55 @@
             class="text-danger"
             *ngIf="signUpForm.controls['email'].hasError('email')" @textAppears
         >
-            Enter a valid email address!
+            Введите верный email!
         </label>
         <label
         class="text-danger"
         *ngIf="signUpForm.controls['email'].hasError('required')" @textAppears
         >
-            Enter an email address!
+            Введите email!
         </label>
-        <label class="control-name">Password</label>
+        <label class="control-name">Пароль</label>
         <input id="password" formControlName="password" type="password" class="form-control">
         <label
         class="text-danger"
         *ngIf="signUpForm.controls['password'].hasError('hasNumber')" @textAppears
         >
-            Must have at least 1 number!
+            Пароль должен содержать хотя бы одну цифру!
         </label>
         <label
         class="text-danger"
         *ngIf="signUpForm.controls['password'].hasError('hasCapitalCase')" @textAppears
         >
-            Must have CapitalCase!
+            Пароль должен содержать хотя бы одну заглавную букву!
         </label>
         <label
         class="text-danger"
         *ngIf="signUpForm.controls['password'].hasError('hasSmallCase')" @textAppears
         >
-            Must have SmallCase
+            Пароль должен содержать хотя бы одну строчную букву!
         </label>
         <label
         class="text-danger"
         *ngIf="signUpForm.controls['password'].hasError('hasSpecialCharacters')" @textAppears
         >
-            Must have hasSpecialCharacters
+            Пароль должен содержать хотя бы один спецсимвол!
         </label>
         <label
         class="text-danger"
         *ngIf="signUpForm.controls['password'].hasError('minlength')" @textAppears
         >
-            Must be at least 8 characters!
+            Пароль должен быть не короче 8 символов!
         </label>
-        <label class="control-name">Confirm Password</label>
+        <label class="control-name">Повторите пароль</label>
         <input id="confirmPassword" formControlName="confirmPassword" type="password" class="form-control">
         <label
         class="text-danger"
         *ngIf="signUpForm.hasError('NoPassswordMatch')" @textAppears
         >
-            Passwords must match
+            Пароли не совпадают!
         </label>
-        <input type="submit" value="submit" [disabled]="signUpForm.invalid">
+        <input type="submit" value="Зарегестрироваться" [disabled]="signUpForm.invalid">
     </form>
     <label
     class="text-danger"
@@ -63,10 +64,9 @@
     >
         {{signUpError.message}}
     </label>
-    <i (click)="getBackToSignIn()">Back</i>
+    <i (click)="getBackToSignIn()">Назад</i>
 </div>
-<div *ngIf="this.actualState === 'sign-in'" class="Form">
-    <h3>Sign In</h3>
+<div *ngIf="this.actualState === 'Вход'" class="Form">
     <form [formGroup]="signInForm" (submit)="signIn()">
     <label class="control-name">Email</label>
     <input id="email" formControlName="email" type="email" class="form-control">
@@ -74,11 +74,11 @@
         class="text-danger"
         *ngIf="signInForm.controls['email'].hasError('email')" @textAppears
     >
-        Enter a valid email address!
+        Введите верный email!
     </label>
-    <label class="control-name">Password</label>
+    <label class="control-name">Пароль</label>
     <input id="password" formControlName="password" type="password" class="form-control">
-    <input type="submit" value="Submit" [disabled]="signInForm.invalid">
+    <input type="submit" value="Войти" [disabled]="signInForm.invalid">
     </form>
     <label
     class="text-danger"
@@ -86,11 +86,10 @@
     >
         {{signInError.message}}
     </label>
-    <i (click)="toSignUp()">Don't have an account? Register</i>
-    <i (click)="toForgotPassword()">Forgot password?</i>
+    <i (click)="toSignUp()">Нет аккаунта? Зарегестрируйтесь</i>
+    <i (click)="toForgotPassword()">Забыли пароль?</i>
 </div>
-<div *ngIf="this.actualState === 'forgot-password'" class="Form">
-    <h3>Reset Password</h3>
+<div *ngIf="this.actualState === 'Забыли пароль'" class="Form">
     <form [formGroup]="forgotPasswordForm" (submit)="forgotPassword()">
     <label class="control-name">Email</label>
     <input id="email" formControlName="email" type="email" class="form-control">
@@ -98,9 +97,9 @@
         class="text-danger"
         *ngIf="forgotPasswordForm.controls['email'].hasError('email')" @textAppears
     >
-        Enter a valid email address!
+        Введите верный email!
     </label>
-    <input type="submit" value="Submit" [disabled]="forgotPasswordForm.invalid">
+    <input type="submit" value="Отправить" [disabled]="forgotPasswordForm.invalid">
     </form>
     <label
     class="text-danger"
@@ -114,5 +113,6 @@
     >
         Сообщение для сброса пароля отправлено на ваш email.
     </label>
-    <i (click)="getBackToSignIn()">Back</i>
+    <i (click)="getBackToSignIn()">Назад</i>
+</div>
 </div>

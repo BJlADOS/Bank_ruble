@@ -17,14 +17,12 @@ export class AuthService {
       private _auth: Auth,
       private _firestore: Firestore,
     ) { 
-
         this._auth.onAuthStateChanged((user: User | null): void => {
             this.user = user;
         });
     }
 
     public async login(email: string, password: string): Promise<void> {
-        //this._auth.setPersistence(browserSessionPersistence);
         await signInWithEmailAndPassword(this._auth, email, password);
     }
 

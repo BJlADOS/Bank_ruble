@@ -1,1 +1,1 @@
-export type State = 'sign-in' | 'sign-up' | 'forgot-password' | 'forgot-password';
+export type State = 'Вход' | 'Регистрация' | 'Забыли пароль';

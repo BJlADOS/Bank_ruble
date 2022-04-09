@@ -15,9 +15,10 @@
         grid-template-columns: 1fr 1fr 1fr;
         column-gap: 20px;
         row-gap: 20px;
-        &__item {       
+        &__item {   
             border: 1px solid #fff;
             border-radius: 8px; 
+            min-height: 100px;
             max-height: 300px;
             padding: 6px;
             padding-bottom: 16px;
@@ -45,8 +46,9 @@
         }
         &__item-image {
             display: inline-block;
-            max-height: 75%;
+            max-height: 75%; //+ херали при scale гавноеды на картинках снова вылезают
             img {   //Спросить Макса - Хули на 100% картинка офигевает и занимает дохера места.
+
                 max-width: 100%;
                 max-height: 100%;
                 object-fit: contain;

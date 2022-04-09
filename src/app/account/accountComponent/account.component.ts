@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { AuthService } from '../services/authService/auth.service';
+import { AuthService } from '../../services/authService/auth.service';
 
 @Component({
     selector: 'app-account',
@@ -16,7 +16,4 @@ export class AccountComponent implements OnInit {
         a = 1;
     }
 
-    public click(): void {
-        this._auth.logout();
-    }
 }

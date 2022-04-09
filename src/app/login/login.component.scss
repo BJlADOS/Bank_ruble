@@ -1,9 +1,9 @@
-.Form {
+.wrapper {
     max-width: 540px;
-    max-height: 540px;
-    margin: 10% auto;
-    background-color: #fff;
+    margin: 7% auto;
     border: #606360 solid 1px;
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .form-control {
@@ -18,7 +18,7 @@
 .text-danger {
     display: block;
     background-color: #dd3a3a;
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 6px 3px;
     margin: 8px 0;
     transition: all .6s ease-in-out;
@@ -27,7 +27,7 @@
 .text-success {
     display: block;
     background-color: #0bc047;
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 6px 3px;
     margin: 8px 0;
 }
@@ -37,7 +37,7 @@ input[type=email] {
     margin-bottom: 8px;
     padding: 4px 8px;
     display: inline-block;
-    border-radius: 6px;
+    border-radius: 10px;
     box-sizing: border-box;
 }
 
@@ -46,7 +46,7 @@ input[type=password] {
     margin-bottom: 8px;
     padding: 4px 8px;
     display: inline-block;
-    border-radius: 6px;
+    border-radius: 10px;
     box-sizing: border-box;
 }
 
@@ -57,33 +57,52 @@ input[type=submit] {
     color: white;
     padding: 14px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 16px;
     cursor: pointer;
     font-size: large;
+
     &:disabled {
         background-color: #606360;
         cursor: default;
+
         &:hover {
             background-color: #606360;
         }
     }
+
     &:hover {
         background-color: #45a049;
     }
-}
-  
-div {
-    border-radius: 5px;
-    background-color: #d4d2d2;
-    padding: 10px;
 }
 
 i {
     display: block;
     margin-top: 10px;
+
     &:hover {
         color: #5b0fe7;
         cursor: pointer;
     }
 }
 
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 0;
+    padding: 10px 0;
+    align-items: center;
+
+    & button {
+        background-color: #15d445;
+        color: white;
+        padding: 6px 8px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: medium;
+
+        &:hover {
+            background-color: #288525;
+        }
+    }
+}

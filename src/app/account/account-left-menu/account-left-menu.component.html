@@ -1,0 +1,11 @@
+<app-account-accordion>
+    <appAccountAccordionItem title="Карты" redirectPath="/account/add-card">
+        <ng-template appAccountAccordionContent>
+            <ng-container *ngIf="(cards$ | async)?.length === 0">
+                Похоже что у вас нету карт :(
+                Попробуйте завести хотя бы одну карту!
+            </ng-container>
+            <app-account-accordion-card *ngFor="let card of cards$ | async" [card]="card"></app-account-accordion-card>
+        </ng-template>
+    </appAccountAccordionItem>
+</app-account-accordion>

@@ -1,0 +1,10 @@
+.wrapper {
+    display: flex;
+    gap: 10px;
+    max-width: 1200px;
+    margin: 15px auto;
+
+    &__right-item {
+        width: 100%;
+    }
+}

@@ -5,7 +5,7 @@ import { AuthGuard, AuthPipe, redirectLoggedInTo, redirectUnauthorizedTo } from 
 import { MainModule } from './main/main.module';
 
 const redirectUnauthorizedToLogin = (): AuthPipe => redirectUnauthorizedTo('login');
-const redirectLoggedInToAccount = (): AuthPipe => redirectLoggedInTo('/account');
+const redirectLoggedInToAccount = (): AuthPipe => redirectLoggedInTo('account');
 
 const routes: Routes = [
     { path: '', redirectTo: '/main', pathMatch: 'full' },

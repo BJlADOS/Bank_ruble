@@ -1,0 +1,38 @@
+.card {
+    display: flex; 
+    align-items: center;
+    
+    gap: 15px;
+    padding: 10px 0;
+    &__icon {
+        svg {
+            height: 36px;
+            width: 36px;
+        }
+    }
+
+    &__icon-img {
+        align-items: center;
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        height: 100%;
+        &-top-bar {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+        }
+
+        &-bottom-bar {
+            color: rgb(148, 148, 148);
+            font-size: small;
+        }
+        &__balance {
+            word-break: break-all;
+        }
+    }
+
+}

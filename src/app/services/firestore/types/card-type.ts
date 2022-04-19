@@ -1,0 +1,1 @@
+export type CardType = 'Visa' | 'MasterCard' | 'Mir';

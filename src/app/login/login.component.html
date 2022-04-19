@@ -1,6 +1,6 @@
 <div class="wrapper">
-    <div class="header"><h3>{{actualState}}</h3><button [routerLink]="['/main']">На главную</button></div>
-<div *ngIf="this.actualState === 'Регистрация'" class="Form">
+    <div class="header"><h3>{{ actualState | loginRU }}</h3><button [routerLink]="['/main']">На главную</button></div>
+<div *ngIf="this.actualState === state.signUp" class="Form">
     <form [formGroup]="signUpForm" (submit)="signUp()">
         <label class="control-name">Email</label>
         <input id="email" formControlName="email" type="email" class="form-control">
@@ -56,7 +56,7 @@
         >
             Пароли не совпадают!
         </label>
-        <input type="submit" value="Зарегестрироваться" [disabled]="signUpForm.invalid">
+        <input type="submit" value="Зарегистрироваться" [disabled]="signUpForm.invalid">
     </form>
     <label
     class="text-danger"
@@ -66,7 +66,7 @@
     </label>
     <i (click)="getBackToSignIn()">Назад</i>
 </div>
-<div *ngIf="this.actualState === 'Вход'" class="Form">
+<div *ngIf="this.actualState === state.signIn" class="Form">
     <form [formGroup]="signInForm" (submit)="signIn()">
     <label class="control-name">Email</label>
     <input id="email" formControlName="email" type="email" class="form-control">
@@ -86,10 +86,10 @@
     >
         {{signInError.message}}
     </label>
-    <i (click)="toSignUp()">Нет аккаунта? Зарегестрируйтесь</i>
+    <i (click)="toSignUp()">Нет аккаунта? Зарегистрируйтесь</i>
     <i (click)="toForgotPassword()">Забыли пароль?</i>
 </div>
-<div *ngIf="this.actualState === 'Забыли пароль'" class="Form">
+<div *ngIf="this.actualState === state.forgotPassword" class="Form">
     <form [formGroup]="forgotPasswordForm" (submit)="forgotPassword()">
     <label class="control-name">Email</label>
     <input id="email" formControlName="email" type="email" class="form-control">

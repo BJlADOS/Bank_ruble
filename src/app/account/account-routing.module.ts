@@ -1,9 +1,14 @@
 import { ModuleWithProviders } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AccountComponent } from './accountComponent/account.component';
+import { AccountAddCardComponent } from './account-add-card/account-add-card.component';
+import { AccountComponent } from './account-component/account.component';
+import { AccountMainComponent } from './account-main/account-main.component';
 
 const routes: Routes = [
-    { path: '', pathMatch: 'full', component: AccountComponent },
+    { path: '', component: AccountComponent, children: [
+        { path: '', component: AccountMainComponent },
+        { path: 'add-card', component: AccountAddCardComponent },
+    ] },
     
 ];
 

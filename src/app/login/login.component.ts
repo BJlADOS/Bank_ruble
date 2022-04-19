@@ -1,13 +1,13 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { filter } from 'rxjs';
+import { filter, takeUntil } from 'rxjs';
 import { CustomError } from 'src/app/classes/CustomError/CustomError';
 import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';
 import { AuthService } from 'src/app/services/authService/auth.service';
 import { State } from 'src/app/shared/types/State';
+import { DestroyService } from '../services/destoyService/destroy.service';
 
 @Component({
     selector: 'app-login',
@@ -20,9 +20,13 @@ import { State } from 'src/app/shared/types/State';
                 animate('.5s', style({ opacity: 1 }))
             ])
         ])
+    ],
+    providers: [
+        DestroyService,
     ]
 })
 export class LoginComponent implements OnInit {
+    public state: typeof State = State;
     public actualState!: State;
     public signUpForm: FormGroup = FormGenerator.getInstance().getSignUpForm();
     public signInForm: FormGroup = FormGenerator.getInstance().getSignInForm();
@@ -36,13 +40,13 @@ export class LoginComponent implements OnInit {
         public route: ActivatedRoute,
         private _auth: AuthService,
         private _router: Router,
-        private _a: Auth
+        private _destroy$: DestroyService,
     ) {
     }
 
     public ngOnInit(): void {
-        this.updateRoute('Вход');
-        this.route.queryParams.pipe(filter((params: Params) => params['actualState'])).subscribe((params: Params): void => {
+        this.updateRoute(State.signIn);
+        this.route.queryParams.pipe(filter((params: Params) => params['actualState']), takeUntil(this._destroy$)).subscribe((params: Params): void => {
             this.actualState = params['actualState'];
         });
     }
@@ -92,17 +96,17 @@ export class LoginComponent implements OnInit {
     }
 
     public getBackToSignIn(): void {
-        this.updateRoute('Вход');
+        this.updateRoute(State.signIn);
         this.resetForms();
     }
 
     public toSignUp(): void {
-        this.updateRoute('Регистрация');
+        this.updateRoute(State.signUp);
         this.resetForms();
     }
 
     public toForgotPassword(): void {
-        this.updateRoute('Забыли пароль');
+        this.updateRoute(State.forgotPassword);
         this.resetForms();
     }
 

@@ -15,6 +15,9 @@ import { provideDatabase,getDatabase } from '@angular/fire/database';
 import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputCheckDirective } from './Directives/inputCheck/input-check.directive';
+import { FirestoreService } from './services/firestore/firestore.service';
+import { LoginRUPipe } from './pipes/login-ru.pipe';
+import { AuthService } from './services/authService/auth.service';
 
 
 @NgModule({
@@ -22,6 +25,7 @@ import { InputCheckDirective } from './Directives/inputCheck/input-check.directi
         AppComponent,
         LoginComponent,
         InputCheckDirective,
+        LoginRUPipe,
     ],
     imports: [
         BrowserModule,
@@ -35,6 +39,8 @@ import { InputCheckDirective } from './Directives/inputCheck/input-check.directi
         BrowserAnimationsModule,
     ],
     providers: [
+        FirestoreService,
+        AuthService,
     ],
     bootstrap: [AppComponent]
 })

@@ -36,7 +36,7 @@ export class MainCarouselComponent implements OnInit, AfterViewInit, OnDestroy {
         const rad: HTMLInputElement | null = document.getElementById(`r${this.currentIndex}`) as HTMLInputElement;
         rad.checked = true;
         this.updateBar();
-        this._carouselTimer = setTimeout(this._callback, this.delay);
+        // this._carouselTimer = setTimeout(this._callback, this.delay);
     }
 
     public ngOnInit(): void {
@@ -67,14 +67,14 @@ export class MainCarouselComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public updateBar(): void {
-        clearTimeout(this._carouselTimer);
+        //clearTimeout(this._carouselTimer);
         const bars: HTMLCollectionOf<Element> = document.getElementsByClassName('main__carousel__navigation__bar')!;
         for (let i: number = 0; i < bars.length; i++) {           
             bars[i].classList.remove('selected');
         }
         const bar: HTMLElement = document.getElementById(`b${this.currentIndex}`)!;
         bar.classList.add('selected');
-        this._carouselTimer = setTimeout(this._callback, this.delay);
+        //this._carouselTimer = setTimeout(this._callback, this.delay);
     }
 
     public updateCarousel(event: Event): void {

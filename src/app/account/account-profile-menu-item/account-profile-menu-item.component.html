@@ -1,0 +1,12 @@
+<div class="profile">
+    <div class="profile__title">
+        <img src="assets/img/user-profile-icon.svg" alt="userIcon">
+        <p *ngIf="(user$ | async)?.firstName?.length !== 0; else defaultName">{{(user$ | async)?.firstName}}</p>
+        <ng-template #defaultName>
+            <p>Пользователь</p>
+        </ng-template>
+    </div>
+    <span class="profile__settings-btn" routerLink="/account/profile">
+        <img src="assets/img/settings-icon.svg" alt="settingsIcon">
+    </span>
+</div>

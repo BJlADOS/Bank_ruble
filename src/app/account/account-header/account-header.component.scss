@@ -4,35 +4,76 @@
     margin: 0 auto;
     display: flex;
     padding: 15px;
+    padding-bottom: 0;
     gap: 20px;
+
     img {
         cursor: pointer;
         max-height: 70px;
         max-width: 100%;
         object-fit: contain;
     }
+
     &__container {
         display: flex;
+        flex-direction: column;
+        gap: 15px;
         justify-content: space-between;
         width: 100%;
     }
 
     &__container-item {
+        width: 100%;
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        &__top-outlet {
-            margin-bottom: 8px;
-            width: 100%;
-            display: flex;
-            flex-direction: flex-end;
-        }
-        
+        flex-direction: row-reverse;
+
         &__bottom-outlet {
-            margin-bottom: 8px;
-            width: 100%;
             display: flex;
-            flex-direction: flex-end;
+            margin-bottom: 8px;
+            justify-content: center;
+
+            button {
+                width: 100%;
+                font-size: larger;
+                border: none;
+                background-color: transparent;
+                cursor: pointer;
+                //border-bottom: 4px solid transparent;
+                position: relative;
+                transition: .2s;
+
+                &:hover {
+                    &::after {
+                        width: 90%;
+                    }
+                }
+                padding-bottom: 15px;
+                &.active {
+                    &::after {
+                        transform: translateX(-50%);
+                        bottom: 0;
+                        left: 50%;
+                        content: '';
+                        position: absolute;
+                        display: block;
+                        border-bottom: 4px solid rgb(38, 185, 9);
+                        width: 90%;
+                    }
+                }
+
+                &::after {
+                    transform: translateX(-50%);
+                    bottom: 0;
+                    left: 50%;
+                    content: '';
+                    position: absolute;
+                    display: block;
+                    border-bottom: 4px solid rgb(38, 185, 9);
+                    width: 0;
+                    transition: .2s;
+                }
+                
+            }
         }
 
         &__logout {
@@ -44,12 +85,14 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: large;
+
             &:hover {
                 background-color: #7a0606;
             }
         }
     }
 }
+
 .wrapper {
     background: rgb(255, 255, 255);
     box-shadow: 0 1px 24px 0 rgb(0 0 0 / 14%);

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Auth, authState, User } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs';
-import { AuthService } from 'src/app/services/authService/auth.service';
 import { DestroyService } from 'src/app/services/destoyService/destroy.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
 import { IUser } from 'src/app/services/firestore/interfaces/User';
@@ -21,7 +19,6 @@ export class MainHeaderComponent implements OnInit {
     constructor(
         public router: Router,
         private _fs: FirestoreService,
-        private _a: AuthService,
         private _destroy$: DestroyService
     ) { }
 

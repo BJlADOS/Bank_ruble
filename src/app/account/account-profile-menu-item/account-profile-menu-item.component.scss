@@ -1,0 +1,44 @@
+.profile {
+    width: 340px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgb(221, 221, 221);
+    border-radius: 10px;
+    gap: 5px;
+    padding: 0 1rem;
+
+    &__title {
+        min-height: 50px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
+        img {
+            height: 36px;
+            width: 36px;
+        }
+        p {
+            vertical-align: middle;
+            text-align: center;
+        }
+    }
+
+    &__settings-btn {
+        align-items: center;
+        vertical-align: middle;
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        &:hover {
+            background-color: rgb(221, 221, 221);
+            cursor: pointer;
+        }
+        img {
+            width: 100%;
+            height: 100%; 
+        }
+    }
+}

@@ -3,18 +3,13 @@
         <img src="assets/img/logo.png" width="33%" height="33%" alt="logo" routerLink="/main">
         <div class="account__head__container">
             <div class="account__head__container-item">
-                <div class="main__head__container-item__top-outlet">
-                    <button routerLink="/account">Главная</button>
-                    <button>but</button>
-                    <button>but</button>
-                    <button>but</button>
-                </div>
-                <div class="main__head__container-item__bottom-outlet">
-                    Наговнить что-то
-                </div>
-            </div>
-            <div class="account__head__container-item">
                 <button class="account__head__container-item__logout" (click)="logOut()">Выйти</button>
+            </div>
+            <div class="account__head__container-item__bottom-outlet">
+                <button [class.active]="isActive('/account')" routerLink="/account">Главная</button>
+                <button>but</button>
+                <button>but</button>
+                <button>but</button>
             </div>
         </div>
     </div>

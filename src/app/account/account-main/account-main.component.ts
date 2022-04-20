@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
-import { IUser } from 'src/app/services/firestore/interfaces/User';
 
 @Component({
     selector: 'app-account-main',

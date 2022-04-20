@@ -18,6 +18,7 @@ import { InputCheckDirective } from './Directives/inputCheck/input-check.directi
 import { FirestoreService } from './services/firestore/firestore.service';
 import { LoginRUPipe } from './pipes/login-ru.pipe';
 import { AuthService } from './services/authService/auth.service';
+import { AccountProfileComponent } from './account/account-profile/account-profile.component';
 
 
 @NgModule({

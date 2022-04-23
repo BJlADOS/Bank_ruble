@@ -31,7 +31,19 @@ export class AuthService {
     }
 
     public async sendEmailVerification(): Promise<void> {
-        return await sendEmailVerification(this._auth.currentUser!);
+        if (localStorage.getItem('sendEmailVerification')) {
+            let diff: number = moment(new Date()).diff(moment(new Date(JSON.parse(localStorage.getItem('sendEmailVerification')!))), 'seconds');
+
+            if (diff < 60) {
+                diff = 60 - diff;
+                const minutes: string = Math.floor(diff / 60).toString();
+                const sec: string = (diff % 60).toString();
+                const seconds: string = sec.length === 2 ? sec : `0${sec}`;
+                throw new Error(`${minutes}:${seconds}`);
+            }
+        }
+        await sendEmailVerification(this._auth.currentUser!);
+        localStorage.setItem('sendEmailVerification', JSON.stringify(new Date()));
     }
 
     public async sendPasswordResetEmail(passwordResetEmail: string): Promise<void> {
@@ -47,16 +59,19 @@ export class AuthService {
                 throw new Error(`${minutes}:${seconds}`);
             }
         }
-        const result: void = await sendPasswordResetEmail(this._auth, passwordResetEmail);
+        await sendPasswordResetEmail(this._auth, passwordResetEmail);
         localStorage.setItem('resetPassword', JSON.stringify(new Date()));
-
-        return result;
     }
 
     public async logout(): Promise<void> {
         await this._auth.signOut();
+        this._firestore.logout();
         this.router.navigate(['/main']);
     }
+
+    public get isEmailVerified(): boolean {
+        return this._auth.currentUser!.emailVerified;
+    } 
 
     public init(): void {
         //inits service when needed

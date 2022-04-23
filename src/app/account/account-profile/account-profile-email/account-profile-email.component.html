@@ -1,0 +1,43 @@
+<div class="email">
+    <div class="email-header">
+        <div class="email-header__notification">
+            <h2>Электронная почта</h2>
+            <p class="text-danger" [@contentExpansion]="!isEmailVerified && isEmailFormDisabled ? 'expanded' : 'collapsed'" (click)="sendEmailVerification()">Подтвердите свой email!</p>
+            <p class="text-success" [@contentExpansion]="isEmailVerified && isEmailFormDisabled ? 'expanded' : 'collapsed'">Email подтверждён!</p>
+        </div>    
+        <button class="email-header__edit" (click)="editEmail()" [class.disabled]="!isEmailFormDisabled"
+            [disabled]="!isEmailFormDisabled || !isEmailVerified">Изменить</button>
+    </div>
+    <div class="email-data">
+        <form [formGroup]="emailForm" (submit)="submitEmailEdit()" class="form">
+            <div class="form__label">
+                <div class="form__label__input">
+                    <label>Email:</label>
+                    <input id="email" formControlName="email" [class.read]="isEmailFormDisabled"
+                        [readonly]="isEmailFormDisabled">
+                </div>
+                <label class="text-danger" *ngIf="!isEmailFormDisabled"
+                    [class.hidden-error]="!emailForm.controls['email'].hasError('required')"
+                    [@contentExpansion]="emailForm.controls['email'].hasError('required') ? 'expanded':'collapsed'">
+                    Поле обязательно для заполнения
+                </label>
+                <label class="text-danger" *ngIf="!isEmailFormDisabled"
+                    [class.hidden-error]="!emailForm.controls['email'].hasError('email')"
+                    [@contentExpansion]="emailForm.controls['email'].hasError('email') ? 'expanded':'collapsed'">
+                    Введите верный email
+                </label>
+            </div>
+                <div class="form__submit" [@contentExpansion]="!isEmailFormDisabled ? 'expanded':'collapsed'">
+                    <input type="submit" value="Сохранить" [disabled]="emailForm.invalid || isSubmitDisabled">
+                    <button type="button" (click)="cancel()">Отмена</button>
+                </div>
+                <div class="form__success" [@contentExpansion]="isEmailFormEdited ? 'expanded':'collapsed'">
+                    <label>Подтверждение отправлено вам на почту</label>
+                </div>
+                <div class="form__error" [@contentExpansion]="hasError ? 'expanded':'collapsed'"
+                    [class.padding-top]="hasError">
+                    <label>{{errorMessage}}</label>
+                </div>
+        </form>
+    </div>
+</div>

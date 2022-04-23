@@ -1,0 +1,75 @@
+.card-info {
+    &__header {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        &-top {
+            display: flex;
+            flex-direction: row;
+            gap: 30px;
+
+            img {
+                width: 44px;
+                height: 44px;
+            }
+        }
+
+        &-bottom {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            color: rgb(148, 148, 148);
+            &__switch {
+                cursor: pointer;
+                text-decoration: underline;
+                &:hover {
+                    color: rgb(104, 104, 104);
+                }
+            }
+        }
+    }
+
+    &__balance {
+        display: inline-block;
+        padding: 40px 0;
+        font-size: large;
+    }
+
+    &__banned {
+        color: #ca0303;
+        font-size: larger;
+        padding-bottom: 15px;
+    }
+
+    &__actions {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        p {
+            color:rgb(148, 148, 148);
+        }
+    }
+
+    &__button {
+        cursor: pointer;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+        max-width: 400px;
+        padding: 4px 8px;
+
+        img {
+            height: 36px;
+            width: 36px;
+        }
+
+        &:hover {
+            background-color: rgb(223, 223, 223);
+        }
+    }
+
+}
+

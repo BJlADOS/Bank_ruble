@@ -1,0 +1,43 @@
+<div class="card-info">
+    <div class="card-info__header">
+        <div class="card-info__header-top">
+            <h1>{{ (card$ | async)?.name }}</h1>
+            <img src="assets/img/cardIcon.svg">
+        </div>
+        <div class="card-info__header-bottom">
+            <p class="card-info__header-bottom__switch" (click)="toggleCardNumber()">{{ (card$ | async)!.cardNumber | cardNumber: isCardNumberHidden }}</p> • <p>срок до {{ (card$ | async)!.expirationDate }}</p> • <p class="card-info__header-bottom__switch" (click)="toggleCvv()">cvv: {{ (card$ | async)!.cvv | cvv: isCvvHidden }}</p>
+        </div>
+    </div>
+    <div class="card-info__balance">
+        <h1>{{ (card$ | async)?.balance }} ₽</h1>
+    </div>
+    <div class="card-info__banned" [@contentExpansion]="(card$ | async)?.isBanned ? 'expanded' : 'collapsed'">
+        Карта заблокирована!
+    </div>
+    <div class="card-info__actions" *ngIf="card$ | async as card">
+        <p>Действия</p>
+        <div class="card-info__button">
+            <img src="assets/img/send-money.svg" alt="sendMoney">
+            <p>Оплатить или перевести</p>
+        </div>
+        <div class="card-info__button">
+            <img src="assets/img/send-money-self.svg" alt="sendMoneySelf">
+            <p>Перевести между своими счетами</p>
+        </div>
+        <div class="card-info__button">
+            <img src="assets/img/add-money.svg" alt="addMoney">
+            <p>Пополнить карту</p>
+        </div>
+        <div *ngIf="!card.isBanned" class="card-info__button" (click)="toggleBan(card)">
+            <img src="assets/img/ban-card.svg" alt="banCard">
+            <p>Заблокировать</p>
+        </div>
+        <div *ngIf="card.isBanned" class="card-info__button" (click)="toggleBan(card)">
+            <img src="assets/img/unban-card.svg" alt="unbanCard">
+            <p>Разблокировать</p>
+        </div>
+    </div>
+</div>
+<div class="error" *ngIf="errorMessage">
+    {{errorMessage}}
+</div>

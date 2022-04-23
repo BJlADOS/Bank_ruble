@@ -1,5 +1,5 @@
 <app-account-header></app-account-header>
-<div class="wrapper">
+<div class="wrapper" *ngIf="this.fs.isLoaded$ | async">
     <div class="wrapper__left-item">
         <app-account-left-menu></app-account-left-menu>
     </div>

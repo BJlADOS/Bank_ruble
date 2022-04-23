@@ -1,0 +1,98 @@
+<div class="user-data">
+    <div class="user-data__header">
+        <h2>Личные данные</h2>
+        <button class="user-data__header-edit" (click)="editUserData()"
+            [disabled]="!isUserDataFormDisabled">Изменить</button>
+    </div>
+    <div class="user-data__data">
+        <form [formGroup]="userForm" (submit)="submitUserData()" class="form">
+            <div class="form__label">
+                <div class="form__label__input">
+                    <label>Имя:</label>
+                    <input id="firstName" formControlName="firstName" [class.read]="isUserDataFormDisabled"
+                        [readonly]="isUserDataFormDisabled">
+                </div>
+                <label class="text-danger" *ngIf="!isUserDataFormDisabled"
+                    [class.hidden-error]="!userForm.controls['firstName'].hasError('required')"
+                    [@contentExpansion]="userForm.controls['firstName'].hasError('required') ? 'expanded':'collapsed'">
+                    Поле обязательно для заполнения
+                </label>
+                <label class="text-danger" *ngIf="!isUserDataFormDisabled"
+                    [class.hidden-error]="!userForm.controls['firstName'].hasError('shouldBeOnlyRussian')"
+                    [@contentExpansion]="userForm.controls['firstName'].hasError('shouldBeOnlyRussian') ? 'expanded':'collapsed'">
+                    Поле должно быть заполнено на русском!
+                </label>
+            </div>
+
+            <div class="form__label">
+                <div class="form__label__input">
+                    <label>Фамилия:</label>
+                    <input id="surname" formControlName="surname" [class.read]="isUserDataFormDisabled"
+                        [readonly]="isUserDataFormDisabled">
+                </div>
+                <label class="text-danger" *ngIf="!isUserDataFormDisabled"
+                    [class.hidden-error]="!userForm.controls['surname'].hasError('shouldBeOnlyRussian')"
+                    [@contentExpansion]="userForm.controls['surname'].hasError('shouldBeOnlyRussian') ? 'expanded':'collapsed'">
+                    Поле должно быть заполнено на русском!
+                </label>
+                <label class="text-danger" *ngIf="!isUserDataFormDisabled"
+                    [class.hidden-error]="!userForm.controls['surname'].hasError('required')"
+                    [@contentExpansion]="userForm.controls['surname'].hasError('required') ? 'expanded':'collapsed'">
+                    Поле должно быть заполнено на русском!
+                </label>
+            </div>
+
+            <div class="form__label">
+                <div class="form__label__input">
+                    <label>Отчество:</label>
+                    <input id="secondName" formControlName="secondName" [class.read]="isUserDataFormDisabled"
+                        [readonly]="isUserDataFormDisabled">
+                </div>
+                <label class="text-danger" *ngIf="!isUserDataFormDisabled"
+                    [class.hidden-error]="!userForm.controls['secondName'].hasError('shouldBeOnlyRussian')"
+                    [@contentExpansion]="userForm.controls['secondName'].hasError('shouldBeOnlyRussian') ? 'expanded':'collapsed'">
+                    Поле должно быть заполнено на русском!
+                </label>
+                <label class="text-danger" *ngIf="!isUserDataFormDisabled"
+                    [class.hidden-error]="!userForm.controls['secondName'].hasError('required')"
+                    [@contentExpansion]="userForm.controls['secondName'].hasError('required') ? 'expanded':'collapsed'">
+                    Поле обязательно для заполнения!
+                </label>
+            </div>
+
+            <div class="form__label">
+                <div class="form__label__input">
+                    <label>Паспорт:</label>
+                    <input id="passport" mask="00 00 000000" formControlName="passport" [class.read]="isUserDataFormDisabled"
+                        [readonly]="isUserDataFormDisabled">
+                </div>
+                <label class="text-danger" *ngIf="!isUserDataFormDisabled"
+                    [class.hidden-error]="!userForm.controls['passport'].hasError('required')"
+                    [@contentExpansion]="userForm.controls['passport'].hasError('required') ? 'expanded':'collapsed'">
+                    Поле обязательно для заполнения!
+                </label>
+                <label class="text-danger" *ngIf="!isUserDataFormDisabled"
+                    [class.hidden-error]="!userForm.controls['passport'].hasError('minlength')"
+                    [@contentExpansion]="userForm.controls['passport'].hasError('minlength') ? 'expanded':'collapsed'">
+                    Паспорт должен содержать 10 цифр!
+                </label>
+                <label class="text-danger" *ngIf="!isUserDataFormDisabled"
+                    [class.hidden-error]="!userForm.controls['passport'].hasError('shouldBeDigits')"
+                    [@contentExpansion]="userForm.controls['passport'].hasError('shouldBeDigits') ? 'expanded':'collapsed'">
+                    Допустимы только числа!
+                </label>
+            </div>
+            <div class="form__submit" [@contentExpansion]="!isUserDataFormDisabled ? 'expanded':'collapsed'">
+                <input type="submit" value="Сохранить" [disabled]="userForm.invalid || isSubmitDisabled">
+                <button type="button" (click)="cancel()">Отмена</button>
+            </div>
+            <div class="form__success" [@contentExpansion]="isUserDataEdited ? 'expanded':'collapsed'">
+                <label>Сохранено!</label>
+            </div>
+            <div class="form__error" [@contentExpansion]="isError ? 'expanded':'collapsed'"
+                [class.padding-top]="isError">
+                <label>{{errorMessage}}</label>
+            </div>
+        </form>
+    </div>
+</div>

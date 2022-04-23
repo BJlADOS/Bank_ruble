@@ -35,6 +35,7 @@ export class LoginComponent implements OnInit {
     public signUpError: CustomError = new CustomError('', false);
     public forgotPasswordError: CustomError = new CustomError('', false);
     public forgotPasswordEmailSent: boolean = false;
+    public isSubmitDisabled: boolean = false;
 
     constructor(
         public route: ActivatedRoute,
@@ -52,25 +53,31 @@ export class LoginComponent implements OnInit {
     }
 
     public signUp(): void {
+        this.switchSubmit();
         const password: string = this.signUpForm.controls['password'].value;
         const email: string = this.signUpForm.controls['email'].value;
         this._auth.register(email, password).then(() => {
+            this.switchSubmit();
             this._auth.sendEmailVerification();
             this.signUpError.state = false;
             this._router.navigate(['/account']);
         }).catch((error: Error): void => {
+            this.switchSubmit();
             this.signUpError.state = true;
             this.signUpError.message = 'Невозможно зарегистрировать аккаунт на данный email';
         });
     }
 
     public signIn(): void {
+        this.switchSubmit();
         const password: string = this.signInForm.controls['password'].value;
         const email: string = this.signInForm.controls['email'].value;
         this._auth.login(email, password).then(() => {
+            this.switchSubmit();
             this.signInError.state = false;
             this._router.navigate(['/account']);
         }).catch((error: Error) => {
+            this.switchSubmit();
             this.signInError.state = true;
             if (/user-disabled/.test(error.message)) {
                 this.signInError.message = 'Ваш аккаунт заблокирован';
@@ -81,14 +88,16 @@ export class LoginComponent implements OnInit {
     }
 
     public forgotPassword(): void {
+        this.switchSubmit();
         const email: string = this.forgotPasswordForm.controls['email'].value;
-
         this._auth.sendPasswordResetEmail(email)
             .then(() => {
+                this.switchSubmit();
                 this.forgotPasswordError.state = false;
                 this.forgotPasswordEmailSent = true;
             })
             .catch((error: Error) => {
+                this.switchSubmit();
                 this.forgotPasswordError.state = true;
                 this.forgotPasswordEmailSent = false;
                 this.forgotPasswordError.message = /\d{1}:\d{2}/.test(error.message)? `Подождите ещё ${error.message}` : 'Пользователя с таким email не существует';
@@ -108,6 +117,10 @@ export class LoginComponent implements OnInit {
     public toForgotPassword(): void {
         this.updateRoute(State.forgotPassword);
         this.resetForms();
+    }
+
+    private switchSubmit(): void {
+        this.isSubmitDisabled = !this.isSubmitDisabled;
     }
 
     private resetForms(): void {

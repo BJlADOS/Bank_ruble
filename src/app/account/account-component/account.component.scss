@@ -4,8 +4,13 @@
     max-width: 1200px;
     margin: 15px auto;
 
+    &__left-item {
+        padding-top: 25px;
+    }
+
     &__right-item {
         width: 100%;
+        padding: 25px;
     }
 
 }

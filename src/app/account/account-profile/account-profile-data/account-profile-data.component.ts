@@ -1,22 +1,26 @@
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { filter, takeUntil } from 'rxjs';
-import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';
 import { DestroyService } from 'src/app/services/destoyService/destroy.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
 import { IUser } from 'src/app/services/firestore/interfaces/User';
 
 @Component({
-    selector: 'app-account-profile',
-    templateUrl: './account-profile.component.html',
-    styleUrls: ['./account-profile.component.scss'],
+    selector: 'app-account-profile-data',
+    templateUrl: './account-profile-data.component.html',
+    styleUrls: ['./account-profile-data.component.scss'],
     animations: [
-        contentExpansion
+        trigger('contentExpansion', [
+            state('expanded', style({ height: '*', opacity: 1, visibility: 'visible' })),
+            state('collapsed', style({ height: '0', opacity: 0, visibility: 'hidden', padding: 0 })),
+            transition('expanded <=> collapsed',
+                animate('300ms cubic-bezier(.37,1.04,.68,.98)')),
+        ])
     ]
 })
-export class AccountProfileComponent implements OnInit {
-
+export class AccountProfileDataComponent implements OnInit {
     public userForm: FormGroup = FormGenerator.getInstance().getEmptyUserForm();
     public user!: IUser;
     public isUserDataFormDisabled: boolean = true;
@@ -27,11 +31,11 @@ export class AccountProfileComponent implements OnInit {
 
     constructor(
         public fs: FirestoreService,
-        public destory$: DestroyService,
+        public destroy$: DestroyService,
     ) { }
 
     public ngOnInit(): void {
-        this.fs.getUser().pipe(filter((user: IUser | null) => user !== null), takeUntil(this.destory$)).subscribe((user: IUser | null): void => {
+        this.fs.getUser().pipe(filter((user: IUser | null) => user !== null), takeUntil(this.destroy$)).subscribe((user: IUser | null): void => {
             this.user = user!;
             FormGenerator.getInstance().updateUserForm(this.userForm, user!.firstName, user!.surname, user!.secondName, user!.passport);
         });

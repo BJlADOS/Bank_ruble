@@ -13,20 +13,13 @@ import { IUser } from 'src/app/services/firestore/interfaces/User';
         DestroyService,
     ]
 })
-export class AccountComponent implements OnInit {
+export class AccountComponent {
 
-    public user$!: Observable<IUser | null>;
-    public user!: IUser| null;
 
     constructor(
-        private _fs: FirestoreService,
+        public fs: FirestoreService,
         private _destroy$: DestroyService,
-        public ff: Firestore
     ) { 
-    }
-
-    public ngOnInit(): void {
-        
     }
 
 }

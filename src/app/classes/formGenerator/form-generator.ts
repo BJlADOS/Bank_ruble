@@ -66,4 +66,50 @@ export class FormGenerator {
             }
         );
     }
+
+    public getEmptyUserForm(): FormGroup {
+        return this._fb.group(        
+            {   
+                firstName: [null, Validators.compose([ 
+                    Validators.required,
+                    CustomValidators.patternValidator(/^([а-яА-Яё]+)$/, { shouldBeOnlyRussian: true }),
+                ])],
+                surname: [null, Validators.compose([ 
+                    Validators.required,
+                    CustomValidators.patternValidator(/^([а-яА-Яё]+)$/, { shouldBeOnlyRussian: true }),
+                ])],
+                secondName: [null, Validators.compose([ 
+                    Validators.required,
+                    CustomValidators.patternValidator(/^([а-яА-Яё]+)$/, { shouldBeOnlyRussian: true }),
+                ])],
+                passport: [null, Validators.compose([ 
+                    Validators.required,
+                    Validators.minLength(10),
+                    CustomValidators.patternValidator(/^([\d]+)$/, { shouldBeDigits: true }),
+                ])],
+            } 
+        );
+    }
+
+    public updateUserForm(form: FormGroup, firstName: string, surname: string, secondName: string, passport: string): void {
+        form.get('firstName')?.patchValue(firstName);
+        form.get('surname')?.patchValue(surname);
+        form.get('secondName')?.patchValue(secondName);
+        form.get('passport')?.patchValue(passport);
+    }
+
+    public getEmptyEmailForm(): FormGroup {
+        return this._fb.group(        
+            {   
+                email: [null, Validators.compose([ 
+                    Validators.required,
+                    Validators.email,
+                ])]
+            } 
+        );
+    }
+
+    public updateEmailForm(form: FormGroup, email: string): void {
+        form.get('email')?.patchValue(email);
+    }
 }

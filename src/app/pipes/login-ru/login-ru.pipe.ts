@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { State, StateRU } from '../shared/types/State';
+import { State, StateRU } from '../../shared/types/State';
 
 @Pipe({
     name: 'loginRU'

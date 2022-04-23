@@ -20,7 +20,7 @@
         <button (click)="createCard('Mir')" [disabled]="isButtonsDisabled">Создать</button>
     </div>
     <div class="card-creation__message" >
-        <p class="card-creation__message-success" *ngIf="isSuccess">{{ successMessage }}</p>
-        <p class="card-creation__message-error" *ngIf="isError">{{ errorMessage }}</p>
+        <p class="card-creation__message-success" [@contentExpansion]="isSuccess ? 'expanded':'collapsed'">{{ successMessage }}</p>
+        <p class="card-creation__message-error" [@contentExpansion]="isError ? 'expanded':'collapsed'">{{ errorMessage }}</p>
     </div>
 </div>

@@ -1,0 +1,157 @@
+.email {
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgb(221, 221, 221);
+    border-radius: 10px;
+    padding: 20px;
+
+    &-header {
+        padding-bottom: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        &__edit {
+            background-color: rgb(167, 167, 167);
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: large;
+
+            &:hover {
+                background-color: #727272;
+            }
+
+            &:disabled {
+                cursor: default;
+
+                &:hover {
+                    background-color: rgb(167, 167, 167);
+                }
+            }
+        }
+    }
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+
+    &__label {
+        padding-bottom: 25px;
+        display: flex;
+        flex-direction: column;
+
+        &__input {
+            display: flex;
+            align-items: center;
+
+            label {
+                font-size: larger;
+                transition: .5s ease-in;
+                min-width: 100px;
+            }
+
+            input {
+                font-size: larger;
+                padding: 4px 8px;
+                border-radius: 10px;
+            }
+        }
+    }
+
+    &__submit {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 30px;
+
+        button {
+            background-color: #ca0303;
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: large;
+
+            &:hover {
+                background-color: #7a0606;
+            }
+        }
+    }
+
+    &__success {
+        font-size: larger;
+        color: #0bc047;
+    }
+
+    &__error {
+        font-size: larger;
+        color: #dd3a3a;
+    }
+
+    input[type=submit] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 30px;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        font-size: large;
+
+        &:hover {
+            background-color: #45a049
+        }
+
+        &:disabled {
+            background-color: #606360;
+            cursor: default;
+
+            &:hover {
+                background-color: #606360;
+            }
+        }
+    }
+}
+
+.read {
+    transition: .5s ease-out;
+    border-color: transparent;
+    color: rgb(167, 167, 167);
+    background-color: transparent;
+    outline: transparent;
+}
+
+.text-danger {
+    display: block;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #dd3a3a;
+    padding-top: 7px;
+
+    &:hover {
+        color: #990000;
+    }
+}
+
+.text-success {
+    display: block;
+    color: #0bc047;
+    border-radius: 10px;
+    padding: 5px 3px;
+}
+
+.padding-top {
+    padding-top: 10px;
+}
+
+.disabled {
+    background-color: #606360;
+
+    &:hover {
+        background-color: #606360;
+    }
+}

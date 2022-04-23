@@ -16,9 +16,15 @@ import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputCheckDirective } from './Directives/inputCheck/input-check.directive';
 import { FirestoreService } from './services/firestore/firestore.service';
-import { LoginRUPipe } from './pipes/login-ru.pipe';
+import { LoginRUPipe } from './pipes/login-ru/login-ru.pipe';
 import { AuthService } from './services/authService/auth.service';
 import { AccountProfileComponent } from './account/account-profile/account-profile.component';
+import { AccountProfileDataComponent } from './account/account-profile/account-profile-data/account-profile-data.component';
+import { AccountProfileEmailComponent } from './account/account-profile/account-profile-email/account-profile-email.component';
+import { NgxMaskModule } from 'ngx-mask';
+import { AccountCardInfoComponent } from './account/account-card-info/account-card-info.component';
+import { CardNumberPipe } from './pipes/card-number/card-number.pipe';
+import { CvvPipe } from './pipes/cvv/cvv.pipe';
 
 
 @NgModule({

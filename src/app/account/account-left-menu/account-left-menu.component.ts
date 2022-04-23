@@ -13,7 +13,7 @@ import { IUser } from 'src/app/services/firestore/interfaces/User';
 export class AccountLeftMenuComponent implements OnInit {
     public user$!: Observable<IUser | null>;
     public user!: IUser | null;
-    public cards$: BehaviorSubject<ICard[]> = new BehaviorSubject<ICard[]>([]);
+    public cards$!: Observable<Array<BehaviorSubject<ICard | null>>>;
 
     constructor(
         private _destroy$: DestroyService,
@@ -21,15 +21,13 @@ export class AccountLeftMenuComponent implements OnInit {
     ) { }
 
     public ngOnInit(): void {
-        // setTimeout(()=> {
-        //     this.user$;
-        // }, 1000); //Костыль, без него не грузит
+        setTimeout(()=> {
+            this.user$;
+        }, 1000); //Костыль, без него не грузит
         this.user$ = this.fs.getUser();
         this.fs.getUser().pipe(filter((user: IUser | null) => user !== null) ,takeUntil(this._destroy$)).subscribe((user: IUser | null) => {
             this.user = user;
-            this.fs.getUserCards().then((cards: ICard[]) => {
-                this.cards$.next(cards);
-            });
+            this.cards$ =  this.fs.getUserCards();
         });
         
     }

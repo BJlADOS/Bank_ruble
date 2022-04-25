@@ -4,6 +4,7 @@ import { AccountAddCardComponent } from './account-add-card/account-add-card.com
 import { AccountCardInfoComponent } from './account-card-info/account-card-info.component';
 import { AccountComponent } from './account-component/account.component';
 import { AccountMainComponent } from './account-main/account-main.component';
+import { AccountPaymentsComponent } from './account-payments/account-payments.component';
 import { AccountProfileComponent } from './account-profile/account-profile.component';
 
 const routes: Routes = [
@@ -12,6 +13,7 @@ const routes: Routes = [
         { path: 'add-card', component: AccountAddCardComponent },
         { path: 'profile', component: AccountProfileComponent },
         { path: 'card/:id', component: AccountCardInfoComponent },
+        { path: 'payments', component: AccountPaymentsComponent },
     ] },
     
 ];

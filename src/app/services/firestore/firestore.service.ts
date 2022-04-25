@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Auth, updateEmail, User } from '@angular/fire/auth';
-import { arrayUnion, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, onSnapshot, query, setDoc, where } from '@angular/fire/firestore';
+import { Auth, updateEmail, updateProfile, User } from '@angular/fire/auth';
+import { arrayUnion, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, onSnapshot, query, runTransaction, setDoc, where } from '@angular/fire/firestore';
+import { Functions, FunctionsModule } from '@angular/fire/functions';
 import { FormGroup } from '@angular/forms';
-import { collection, getDocs, Query, QueryDocumentSnapshot, QuerySnapshot, Unsubscribe, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, Query, QueryDocumentSnapshot, QuerySnapshot, Transaction, Unsubscribe, updateDoc } from 'firebase/firestore';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { CardGenerator } from 'src/app/classes/card-generator/card-generator';
@@ -17,12 +18,7 @@ export class FirestoreService {
 
     private _cardsLoaded$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     private _user$: BehaviorSubject<IUser | null> = new BehaviorSubject<IUser | null>(null);
-    private _loadingSubscription: Subscription = this._cardsLoaded$.asObservable().subscribe((number: number) => {
-        if (this._user$.value && number === this._user$.value!.cards.length) {
-            this.isLoaded$.next(true);
-            this._loadingSubscription.unsubscribe();
-        }
-    });
+    private _loadingSubscription!: Subscription;
     private _subsription!: Unsubscribe;
     private _cards$: BehaviorSubject<Array<BehaviorSubject<ICard | null>>> = new BehaviorSubject<Array<BehaviorSubject<ICard | null>>>([]);
     private _cardSubs: Unsubscribe[] = [];
@@ -30,7 +26,9 @@ export class FirestoreService {
     constructor(
         public fs: Firestore,
         public auth: Auth,
-    ) { }
+    ) { 
+        
+    }
 
 
     public async createUser(id: string, email: string): Promise<void> {
@@ -62,10 +60,24 @@ export class FirestoreService {
         this._subsription = onSnapshot(doc(this.fs, 'users', id), { includeMetadataChanges: true }, (user: DocumentSnapshot<DocumentData>) => {
             if (!user.metadata.hasPendingWrites) {
                 const userData: IUser = user.data() as IUser;
+                if (!this._user$.value && userData) {
+                    this.subscribeToCardsChanges(userData.cards);
+                } else if (this._user$.value!.defaultCard === userData.defaultCard && !this.isAllcardsBanned()) {
+                    this.subscribeToCardsChanges(userData.cards);
+                }
                 this._user$.next(userData);
-                this.subscribeToCardsChanges(userData.cards);
                 if (this.auth.currentUser?.email !== userData.email) {
-                    this.updateEmail(userData, this.auth.currentUser?.email!);
+                    this.updateEmail(this.auth.currentUser?.email!);
+                }
+                if (this._user$.value) {
+                    this._loadingSubscription = this._cardsLoaded$.asObservable().subscribe((number: number) => {
+                        if (number === this._user$.value!.cards.length) {
+                            this.isLoaded$.next(true);
+                            if (this._loadingSubscription) {
+                                this._loadingSubscription.unsubscribe();
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -87,10 +99,30 @@ export class FirestoreService {
             secondName: secondName,
             passport: passport,
         });
+        updateProfile(this.auth.currentUser, { displayName: firstName });
     }
 
     public getUserCards(): Observable<Array<BehaviorSubject<ICard | null>>> {
         return this._cards$.asObservable();
+    }
+
+    public isCardDefault(card: BehaviorSubject<ICard | null>): boolean {
+        return this.findIndexOfCard(card) === this._user$.value?.defaultCard;
+    }
+
+    public isCardDefaultById(id: string): boolean {
+        return this.isCardDefault(this.findCardSubjectdById(id));
+    }
+
+    public isCardBelongsToUser(cardNumber: string): boolean {
+        const id: string = parseInt(cardNumber).toString(16);
+        for (const card$ of this._cards$.value) {
+            if (card$.value?.id === id) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public subscribeToCardsChanges(cards: Array<DocumentReference<DocumentData>>): void {
@@ -117,34 +149,47 @@ export class FirestoreService {
         }
     }
 
-    public async updateEmail(user: IUser, actualEmail: string): Promise<void> {
-        const userRef: DocumentReference<DocumentData> = doc(this.fs, 'users', user.id);
+    public async updateEmail(actualEmail: string): Promise<void> {
+        const userRef: DocumentReference<DocumentData> = this.getUserRef();
         await updateDoc(userRef, {
             email: actualEmail
         });
         console.log('email updated');
     }
 
-
-
-    public async getCardByNumber(cardNumber: string): Promise<ICard> {
+    //Пересмотреть
+    public async getCardExistanceByNumber(cardNumber: string): Promise<boolean> {
         const cardDoc: DocumentReference<DocumentData> = this.getCardReference(cardNumber);
         const cardSnap: DocumentSnapshot<DocumentData> = await getDoc(cardDoc);
 
-        if (cardSnap.data()) {
-            return cardSnap.data() as ICard;
-        } else {
-            throw new Error('Такой карты не существует!');
+        if (cardSnap.exists()) {
+            return true;
         }
+        throw new Error('Такой карты не существует!');
     }
 
-    public getCardById(id: string): Observable<ICard | null> {
+    public async checkCardNumberForFastSend(cardNumber: string): Promise<boolean> {
+        const existance: boolean = await this.getCardExistanceByNumber(cardNumber);
+        if (this.isAllcardsBanned() || this._user$.value?.cards.length === 0) {
+            throw new Error('У вас нет доступных карт для оплаты');
+        }
+        if (existance && !this.isCardBelongsToUser(cardNumber)) {
+            return true;
+        } 
+        throw new Error('Карта принадлежит вам, воспользуйтесь переводами между своими счетами');
+    }
+
+    public getUserCardById(id: string): Observable<ICard | null> {
         for(const card$ of this._cards$.value) {
             if (id === card$.value?.id) {
                 return card$.asObservable();
             }
         }
         throw new Error('Карта не найдена');
+    }
+
+    public getDefaultCard(): BehaviorSubject<ICard | null> {
+        return this._cards$.value[this._user$.value!.defaultCard];
     }
 
     public async editEmail(newEmail: string): Promise<void> {
@@ -184,7 +229,7 @@ export class FirestoreService {
         if (!this.auth.currentUser?.emailVerified) {
             throw new Error('Сначала подтвердите свой email!');
         }
-        if (!this.checkUserForCardCreation(user)) {
+        if (!this.checkUserDataFilled()) {
             throw new Error('Для создания карты данные пользователя должны быть заполнены!');
         }
         let isValid: boolean = false;
@@ -208,22 +253,85 @@ export class FirestoreService {
             isBanned: false,
             id: cardId
         };
-        const cardRef: DocumentReference<DocumentData> = doc(this.fs, 'cards', card.cardNumber);
+        const cardRef: DocumentReference<DocumentData> = this.getCardReference(card.cardNumber);
         await setDoc(cardRef, card);
-        const userRef: DocumentReference<DocumentData> = doc(this.fs, 'users', this._user$.value!.id);
+        const userRef: DocumentReference<DocumentData> = this.getUserRef();
         updateDoc(userRef, {
             cards: arrayUnion(cardRef)
         });
     }
 
+    public async updateUserDefaultCard(newId: number): Promise<void> {
+        const userRef: DocumentReference<DocumentData> = this.getUserRef();
+        await updateDoc(userRef, {
+            defaultCard: newId
+        });
+    }
+
+    public setDefaultCardById(id: string): void {
+        this.updateUserDefaultCard(this.findIndexOfCard(this.findCardSubjectdById(id)));
+    }
+
+    public isAllcardsBanned(): boolean {
+        for (const card$ of this._cards$.value) {
+            if (!card$.value?.isBanned) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public async banToggleCard(card: ICard): Promise<void> {
-        const cardRef: DocumentReference<DocumentData> = doc(this.fs, 'cards', card.cardNumber);
+        const cardRef: DocumentReference<DocumentData> = this.getCardReference(card.cardNumber);
+        if (this.isCardDefaultById(card.id) && !card.isBanned) {
+            for (const card$ of this._cards$.value) {
+                if (!card$.value?.isBanned && card$.value?.id !== card.id) {
+                    await this.updateUserDefaultCard(this.findIndexOfCard(card$));
+                    break;
+                }
+            }
+        } else if(card.isBanned && this.isAllcardsBanned()) {
+            await this.updateUserDefaultCard(this.findIndexOfCard(this.findCardSubjectdById(card.id)));
+        }
         await updateDoc(cardRef, {
             isBanned: !card.isBanned
         });
     }
 
+    public async sendMoney(from: string, to: string, amount: number): Promise<void> {
+        console.log(amount);
+        const fromRef: DocumentReference<DocumentData> = this.getCardReference(from);
+        const toRef: DocumentReference<DocumentData> = this.getCardReference(to);
+        try {
+            if (!Number.isFinite(amount)) {
+                throw 'Некорректная сумма';
+            }
+            await runTransaction(this.fs, async (transaction: Transaction) => {
+                const fromSnap: DocumentSnapshot<DocumentData> = await transaction.get(fromRef);
+                const toSnap: DocumentSnapshot<DocumentData> = await transaction.get(toRef);
+                if (!toSnap.exists()) {
+                    throw 'Такой карты не существует';
+                }
+                const balanceFrom: number = (fromSnap.data() as ICard).balance;
+                if (balanceFrom < amount) {
+                    throw 'Недостаточно средств';
+                }
+                
+                const newBalanceFrom: number = parseFloat(((fromSnap.data() as ICard).balance - amount).toFixed(2));
+                const newBalanceTo: number = parseFloat(((toSnap.data() as ICard).balance + amount).toFixed(2));
+                transaction.update(fromRef, { balance: newBalanceFrom });
+                transaction.update(toRef, { balance: newBalanceTo });
+            });
+            console.log('Транзакция успешно проведена!');
+        } catch(e) {
+            throw new Error(`Ошибка транзакции: ${e}`);
+        }
+
+    }
+
     public logout(): void {
+        this.isLoaded$.next(false);
         this._subsription();
         this.unsubscribeFromCardChanges();
     }
@@ -232,18 +340,18 @@ export class FirestoreService {
         //init method
     }
 
-    private checkUserForCardCreation(user: IUser): boolean {
+    public checkUserDataFilled(): boolean {
 
-        if (user.firstName.length === 0) {
+        if (this._user$.value!.firstName.length === 0) {
             return false;
         }
-        if (user.surname.length === 0) {
+        if (this._user$.value!.surname.length === 0) {
             return false;
         }
-        if (user.secondName.length === 0) {
+        if (this._user$.value!.secondName.length === 0) {
             return false;
         }
-        if (user.passport.length === 0) {
+        if (this._user$.value!.passport.length === 0) {
             return false;
         }
 
@@ -254,6 +362,23 @@ export class FirestoreService {
         word = word.toLowerCase();
 
         return `${word[0].toUpperCase()}${word.slice(1)}`;
+    }
+
+    private findCardSubjectdById(id: string): BehaviorSubject<ICard | null> {
+        for (const card$ of this._cards$.value) {
+            if (card$.value?.id === id) {
+                return card$;
+            }
+        }
+        throw new Error('карта не найдена');
+    }
+
+    private findIndexOfCard(card: BehaviorSubject<ICard | null>): number {
+        return this._cards$.value.indexOf(card);
+    }
+
+    private getUserRef(): DocumentReference<DocumentData> {
+        return doc(this.fs, 'users', this._user$.value!.id);
     }
 
     private getCardReference(cardNumber: string): DocumentReference<DocumentData> {

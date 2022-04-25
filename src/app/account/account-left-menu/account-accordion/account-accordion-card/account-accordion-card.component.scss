@@ -61,4 +61,18 @@
     &.banned {
         border-left: 3px solid #ca0303;
     }
+
+    &.active {
+        &::after {
+            transform: translateX(-50%);
+            bottom: 0;
+            left: 50%;
+            content: '';
+            position: absolute;
+            display: block;
+            border-bottom: 4px solid rgb(38, 185, 9);
+            width: 90%;
+        }
+    }
+
 }

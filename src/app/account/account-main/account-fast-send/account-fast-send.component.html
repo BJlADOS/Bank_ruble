@@ -1,0 +1,73 @@
+<div class="fast-send">
+    <div class="fast-send__header">
+        <h2>Переводы</h2>
+    </div>
+    <div class="fast-send__card-number">
+        <form [formGroup]="sendMoneyByCardNumberForm" (submit)="enrollCard()" class="form-row">
+            <div class="form-row__label">
+                <div class="form-row__label__input">
+                    <label>Номер карты:</label>
+                    <input type="text" id="cardNumber" formControlName="cardNumber" mask="0000 0000 0000 0000"
+                        placeholder="0000 0000 0000 0000" [readonly]="isCardNumberEnrolled"
+                        [class.read]="isCardNumberEnrolled">
+                </div>
+                <label class="text-danger"
+                    [@contentExpansion]="sendMoneyByCardNumberForm.controls['cardNumber'].hasError('shouldHaveKnownDigits') ? 'expanded':'collapsed'">
+                    Номер карты должен начинаться с цифр 2, 3 или 4
+                </label>
+                <label class="text-danger" [@contentExpansion]="existCheckErrorMessage ? 'expanded':'collapsed'">
+                    {{ existCheckErrorMessage }}
+                </label>
+            </div>
+            <div class="form__submit" [@contentExpansion]="!sendMoneyByCardNumberForm.invalid ? 'expanded':'collapsed'">
+                <input type="submit" value="Перевести" [disabled]="sendMoneyByCardNumberForm.invalid || !isCardExists">
+            </div>
+        </form>
+    </div>
+    <div class="fast-send__main-form" [@contentExpansion]="isCardNumberEnrolled ? 'expanded':'collapsed'">
+        <form [formGroup]="moneyAmountForm" (submit)="sendMoney()" class="form-column">
+            <div class="form-column__label">
+                <div class="form-column__label__input">
+                    <label>Получатель:</label>
+                    <label>{{ moneyReceiver }}</label>
+                </div>
+            </div>
+            <div class="form-column__label">
+                <div class="form-column__label__input">
+                    <label>Счёт списания:</label>
+                    <select name="card" id="card" formControlName="card">
+                        <option *ngFor="let card$ of this.fs.getUserCards() | async" [hidden]="(card$ | async)?.isBanned"
+                            [ngValue]="card$">
+                            <app-account-accordion-card [card$]="card$"></app-account-accordion-card>
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-column__label">
+                <div class="form-column__label__input">
+                    <label>Сумма:</label>
+                    <input normalizeNumberInput type="text" id="amount" formControlName="amount"
+                        mask="separator.2 || separator,2" placeholder="00.00" [readonly]="isMoneySended"
+                        [class.read]="isMoneySended">
+                </div>
+                <label class="text-danger"
+                    [@contentExpansion]="moneyAmountForm.controls['amount'].hasError('required') ? 'expanded':'collapsed'">
+                    Поле обязательно для заполнения!
+                </label>
+            </div>
+            <div class="form__submit">
+                <input type="submit" value="Перевести" [disabled]="moneyAmountForm.invalid || isMoneySended || isEnoughMoneyError">
+                <button type="button" class="form__cancel" (click)="cancel()">Отмена</button>
+            </div>
+            <div class="form__success" [@contentExpansion]="successMessage ? 'expanded':'collapsed'">
+                <label>{{ successMessage }}</label>
+            </div>
+            <div class="form__error" [@contentExpansion]="errorMessage ? 'expanded':'collapsed'">
+                <label>{{ errorMessage }}</label>
+            </div>
+            <div class="form__error" [@contentExpansion]="isEnoughMoneyError ? 'expanded':'collapsed'">
+                <label>{{ isEnoughMoneyError }}</label>
+            </div>
+        </form>
+    </div>
+</div>

@@ -27,6 +27,7 @@ import { DestroyService } from '../services/destoyService/destroy.service';
 })
 export class LoginComponent implements OnInit {
     public state: typeof State = State;
+    public redirect: string | undefined;
     public actualState!: State;
     public signUpForm: FormGroup = FormGenerator.getInstance().getSignUpForm();
     public signInForm: FormGroup = FormGenerator.getInstance().getSignInForm();
@@ -46,9 +47,13 @@ export class LoginComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.updateRoute(State.signIn);
-        this.route.queryParams.pipe(filter((params: Params) => params['actualState']), takeUntil(this._destroy$)).subscribe((params: Params): void => {
-            this.actualState = params['actualState'];
+        this.route.queryParams.pipe(takeUntil(this._destroy$)).subscribe((params: Params): void => {
+            this.redirect = params['redirectTo'];
+            if (params['actualState']) {
+                this.updateRoute(params['actualState']);
+            } else {
+                this.updateRoute(State.signIn);
+            }
         });
     }
 
@@ -75,7 +80,11 @@ export class LoginComponent implements OnInit {
         this._auth.login(email, password).then(() => {
             this.switchSubmit();
             this.signInError.state = false;
-            this._router.navigate(['/account']);
+            if (this.redirect) {
+                this._router.navigate([this.redirect]);
+            } else {
+                this._router.navigate(['/account']);
+            }
         }).catch((error: Error) => {
             this.switchSubmit();
             this.signInError.state = true;
@@ -131,6 +140,7 @@ export class LoginComponent implements OnInit {
 
     
     private updateRoute(state: State): void {
+        this.actualState = state;
         this._router.navigate([], {
             relativeTo: this.route,
             queryParams: { actualState: state },

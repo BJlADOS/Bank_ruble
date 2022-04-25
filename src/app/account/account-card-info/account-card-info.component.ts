@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Observable, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, takeUntil } from 'rxjs';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { DestroyService } from 'src/app/services/destoyService/destroy.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
@@ -18,6 +18,8 @@ export class AccountCardInfoComponent implements OnInit {
     public errorMessage: string | undefined;
     public isCardNumberHidden: boolean = true;
     public isCvvHidden: boolean = true;
+    public moneyReceiver: string = '';
+
 
     constructor(
         private _activatedRoute: ActivatedRoute,
@@ -31,7 +33,7 @@ export class AccountCardInfoComponent implements OnInit {
             this.isCardNumberHidden = true;
             this.isCvvHidden = true;
             try {
-                this.card$ = this._fs.getCardById(cardIdFormRoute);
+                this.card$ = this._fs.getUserCardById(cardIdFormRoute);
             }
             catch {
                 this.errorMessage = 'Извините, но такая карта не найдена';
@@ -50,6 +52,10 @@ export class AccountCardInfoComponent implements OnInit {
 
     public toggleBan(card: ICard): void {
         this._fs.banToggleCard(card);
+    }
+
+    public isDefault(card: ICard): boolean {
+        return this._fs.isCardDefaultById(card.id);
     }
 
 }

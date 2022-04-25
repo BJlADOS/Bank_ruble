@@ -64,9 +64,9 @@ export class AuthService {
     }
 
     public async logout(): Promise<void> {
-        await this._auth.signOut();
         this._firestore.logout();
         this.router.navigate(['/main']);
+        await this._auth.signOut();
     }
 
     public get isEmailVerified(): boolean {

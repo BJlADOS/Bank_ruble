@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { BehaviorSubject, filter, Observable } from 'rxjs';
+import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 import { ICard } from 'src/app/services/firestore/interfaces/Card';
 
 @Component({
@@ -10,6 +11,12 @@ import { ICard } from 'src/app/services/firestore/interfaces/Card';
 export class AccountAccordionCardComponent {
 
     @Input() public card$!: BehaviorSubject<ICard | null>;
-    constructor() { }
+    constructor(
+        private _router: Router
+    ) { }
+
+    public isCardSelected(id: string | undefined): boolean {
+        return this._router.url === `/account/card/${id}`;
+    }
 
 }

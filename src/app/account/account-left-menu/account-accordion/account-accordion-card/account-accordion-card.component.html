@@ -1,4 +1,5 @@
-<div class="card" [routerLink]="'/account/card/' + (card$ | async)?.id" [class.banned]="(card$ | async)?.isBanned">
+<div class="card" *ngIf="card$ | async as card" [routerLink]="'/account/card/' + card.id"
+ [class.banned]="card.isBanned" [class.active]="isCardSelected(card.id)">
     <div class="card__icon">
         <span class="card__icon-img">
             <img src="assets/img/cardIcon.svg" alt="cardIcon">
@@ -6,11 +7,11 @@
     </div>
     <div class="card__info">
         <span class="card__info-top-bar">
-            <span class="card__info__name">{{ (card$ | async)?.name }}</span>
-            <span class="card__info__balance">{{ (card$ | async)?.balance }} ₽</span>
+            <span class="card__info__name">{{ card.name }} </span>
+            <span class="card__info__balance">{{ card.balance }} ₽</span>
         </span>
         <p class="card__info-bottom-bar">
-            {{ (card$ | async)!.cardNumber | cardNumber: true }}
+            {{ card.cardNumber | cardNumber: true }}
         </p>
     </div>
 </div>

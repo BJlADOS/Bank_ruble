@@ -19,6 +19,9 @@ import { NgxMaskModule, IConfig } from 'ngx-mask';
 import { AccountCardInfoComponent } from './account-card-info/account-card-info.component';
 import { CardNumberPipe } from '../pipes/card-number/card-number.pipe';
 import { CvvPipe } from '../pipes/cvv/cvv.pipe';
+import { AccountPaymentsComponent } from './account-payments/account-payments.component';
+import { AccountFastSendComponent } from './account-main/account-fast-send/account-fast-send.component';
+import { NormalizeNumberDirective } from './directives/normalize-number/normalize-number.directive';
 
 
 
@@ -40,6 +43,9 @@ import { CvvPipe } from '../pipes/cvv/cvv.pipe';
         AccountCardInfoComponent,
         CardNumberPipe,
         CvvPipe,
+        AccountPaymentsComponent,
+        AccountFastSendComponent,
+        NormalizeNumberDirective,
     ],
     imports: [
         CommonModule,

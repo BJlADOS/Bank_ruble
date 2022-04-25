@@ -1,20 +1,23 @@
-<div class="card-info">
+<div class="card-info" *ngIf="card$ | async as card">
     <div class="card-info__header">
         <div class="card-info__header-top">
-            <h1>{{ (card$ | async)?.name }}</h1>
+            <h1>{{ card.name }}</h1>
             <img src="assets/img/cardIcon.svg">
         </div>
         <div class="card-info__header-bottom">
-            <p class="card-info__header-bottom__switch" (click)="toggleCardNumber()">{{ (card$ | async)!.cardNumber | cardNumber: isCardNumberHidden }}</p> • <p>срок до {{ (card$ | async)!.expirationDate }}</p> • <p class="card-info__header-bottom__switch" (click)="toggleCvv()">cvv: {{ (card$ | async)!.cvv | cvv: isCvvHidden }}</p>
+            <p class="card-info__header-bottom__switch" (click)="toggleCardNumber()">{{ card.cardNumber | cardNumber: isCardNumberHidden }}</p> • <p>срок до {{ card.expirationDate }}</p> • <p class="card-info__header-bottom__switch" (click)="toggleCvv()">cvv: {{ card.cvv | cvv: isCvvHidden }}</p>
         </div>
     </div>
     <div class="card-info__balance">
-        <h1>{{ (card$ | async)?.balance }} ₽</h1>
+        <h1>{{ card.balance }} ₽</h1>
     </div>
-    <div class="card-info__banned" [@contentExpansion]="(card$ | async)?.isBanned ? 'expanded' : 'collapsed'">
+    <div class="card-info__banned" [@contentExpansion]="card.isBanned ? 'expanded' : 'collapsed'">
         Карта заблокирована!
     </div>
-    <div class="card-info__actions" *ngIf="card$ | async as card">
+    <div class="card-info__default" [@contentExpansion]="isDefault(card) && !card.isBanned ? 'expanded' : 'collapsed'">
+        Карта по умолчанию
+    </div>
+    <div class="card-info__actions">
         <p>Действия</p>
         <div class="card-info__button">
             <img src="assets/img/send-money.svg" alt="sendMoney">

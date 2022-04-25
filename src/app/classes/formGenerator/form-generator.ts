@@ -1,4 +1,8 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { format } from 'path';
+import { BehaviorSubject } from 'rxjs';
+import { FirestoreService } from 'src/app/services/firestore/firestore.service';
+import { ICard } from 'src/app/services/firestore/interfaces/Card';
 import { CustomValidators } from '../CustomValidators/custom-validators';
 
 export class FormGenerator {
@@ -111,5 +115,37 @@ export class FormGenerator {
 
     public updateEmailForm(form: FormGroup, email: string): void {
         form.get('email')?.patchValue(email);
+    }
+
+    public getSendMoneyToCardForm(): FormGroup {
+        return this._fb.group(        
+            {   
+                cardNumber: ['', Validators.compose([ 
+                    Validators.required,
+                    Validators.minLength(16),
+                    CustomValidators.patternValidator(/^[245]/, { shouldHaveKnownDigits: true }),
+                ])]
+            } 
+        );
+    }
+
+    public updateSendMoneyToCardForm(form: FormGroup, cardNumber: string): void {
+        form.get('cardNumber')?.patchValue(cardNumber);
+    }
+
+    public getMoneyAmountForm(): FormGroup {
+        return this._fb.group(        
+            {   
+                card: [null],
+                amount: [null, Validators.compose([ 
+                    Validators.required,
+                ])]
+            } 
+        );
+    }
+
+    public updateMoneyAmountForm(form:FormGroup, card$: BehaviorSubject<ICard | null>, amount: number | null): void {
+        form.get('card')?.patchValue(card$);  
+        form.get('amount')?.patchValue(amount);  
     }
 }

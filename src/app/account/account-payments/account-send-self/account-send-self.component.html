@@ -1,0 +1,65 @@
+<div class="self-send">
+    <div class="self-send__header" [class.active]="isExpanded" (click)="expandToggle()">
+        <h2>Перевод между своими счетами</h2>
+        <svg class="expand-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                        width="24" height="24">
+                        <path fill="none" d="M0 0h24v24H0z" />
+                        <path d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z" />
+                    </svg>
+    </div>
+    <div class="self-send__main-form" [@contentExpansion]="isExpanded ? 'expanded':'collapsed'">
+        <form [formGroup]="sendSelfForm" (submit)="sendMoney()" class="form-column">
+            <div class="form-column__label">
+                <div class="form-column__label__input">
+                    <label class="form-column__label__input-card">Счёт списания:</label>
+                    <select name="cardFrom" id="cardFrom" formControlName="cardFrom">
+                        <option *ngFor="let card$ of this.fs.getUserCards() | async" [hidden]="(card$ | async)?.isBanned || card$ === sendSelfForm.get('cardTo')?.value"
+                            [ngValue]="card$">
+                            <app-account-accordion-card [card$]="card$"></app-account-accordion-card>
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-column__label">
+                <div class="form-column__label__input">
+                    <label class="form-column__label__input-card">Счёт зачисления:</label>
+                    <select name="cardTo" id="cardTo" formControlName="cardTo">
+                        <option *ngFor="let card$ of this.fs.getUserCards() | async" [hidden]="(card$ | async)?.isBanned || card$ === sendSelfForm.get('cardFrom')?.value"
+                            [ngValue]="card$">
+                            <app-account-accordion-card [card$]="card$"></app-account-accordion-card>
+                        </option>
+                    </select>
+                </div>
+                <label class="text-danger"
+                [@contentExpansion]="sendSelfForm.controls['cardTo'].hasError('required') ? 'expanded':'collapsed'">
+                Выберите карту для зачисления!
+            </label>
+            </div>
+            <div class="form-column__label">
+                <div class="form-column__label__input">
+                    <label class="form-column__label__input-amount">Сумма:</label>
+                    <input normalizeNumberInput type="text" id="amount" formControlName="amount"
+                        mask="separator.2 || separator,2" placeholder="00.00" [readonly]="isMoneySended"
+                        [class.read]="isMoneySended">
+                </div>
+                <label class="text-danger"
+                    [@contentExpansion]="sendSelfForm.controls['amount'].hasError('required') ? 'expanded':'collapsed'">
+                    Поле обязательно для заполнения!
+                </label>
+            </div>
+            <div class="form__submit">
+                <input type="submit" value="Перевести" [disabled]="sendSelfForm.invalid || isMoneySended || isEnoughMoneyError">
+                <button type="button" class="form__cancel" (click)="cancel()">Отмена</button>
+            </div>
+            <div class="form__success" [@contentExpansion]="successMessage ? 'expanded':'collapsed'">
+                <label>{{ successMessage }}</label>
+            </div>
+            <div class="form__error" [@contentExpansion]="errorMessage ? 'expanded':'collapsed'">
+                <label>{{ errorMessage }}</label>
+            </div>
+            <div class="form__error" [@contentExpansion]="isEnoughMoneyError ? 'expanded':'collapsed'">
+                <label>{{ isEnoughMoneyError }}</label>
+            </div>
+        </form>
+    </div>
+</div>

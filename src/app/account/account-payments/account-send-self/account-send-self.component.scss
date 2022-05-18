@@ -1,4 +1,4 @@
-.fast-send {
+.self-send {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -12,38 +12,16 @@
         flex-direction: column;
     }
 
-}
-
-.form-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-    &__label {
+    &__header {
         display: flex;
-        flex-direction: column;
-        &__input {
-            display: flex;
-            align-items: center;
-            flex-direction: row;
-    
-            label {
-                font-size: larger;
-                transition: .5s ease-in;
-                min-width: 140px;
+        gap: 10px;
+        align-items: center;
+        cursor: pointer;
+        &.active {
+            .expand-arrow {
+                transition: 200ms;
+                transform: rotate(180deg);
             }
-    
-            input {
-                font-size: larger;
-                padding: 4px 8px;
-                border-radius: 10px;
-                max-width: 210px;
-            }
-        }
-    
-        &:last-child {
-            padding-bottom: 0; //не фиксится ласт отступ
         }
     }
 }
@@ -61,17 +39,23 @@
             align-items: center;
             flex-direction: row;
     
-            label {
-                font-size: larger;
-                transition: .5s ease-in;
-                min-width: 140px;
-            }
-    
             input {
                 font-size: larger;
                 padding: 4px 8px;
                 border-radius: 10px;
                 max-width: 210px;
+            }
+
+            &-card {
+                font-size: larger;
+                transition: .5s ease-in;
+                min-width: 165px;
+            }
+
+            &-amount {
+                font-size: larger;
+                transition: .5s ease-in;
+                min-width: 75px;
             }
         }
     
@@ -167,4 +151,8 @@ select {
     padding: 6px 6px;
     border-radius: 10px;
     font-size: medium;
+}
+
+.expand-arrow {
+    transition: 200ms;
 }

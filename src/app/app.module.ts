@@ -19,7 +19,7 @@ import { FirestoreService } from './services/firestore/firestore.service';
 import { LoginRUPipe } from './pipes/login-ru/login-ru.pipe';
 import { AuthService } from './services/authService/auth.service';
 import { provideFunctions,getFunctions } from '@angular/fire/functions';
-import { NormalizeNumberDirective } from './account/directives/normalize-number/normalize-number.directive';
+import { AccountSendSelfComponent } from './account/account-payments/account-send-self/account-send-self.component';
 
 
 @NgModule({

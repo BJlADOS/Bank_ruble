@@ -10,10 +10,10 @@ import { AccountProfileComponent } from './account-profile/account-profile.compo
 const routes: Routes = [
     { path: '', component: AccountComponent, children: [
         { path: '', component: AccountMainComponent },
-        { path: 'add-card', component: AccountAddCardComponent },
-        { path: 'profile', component: AccountProfileComponent },
-        { path: 'card/:id', component: AccountCardInfoComponent },
-        { path: 'payments', component: AccountPaymentsComponent },
+        { path: 'add-card', component: AccountAddCardComponent, data: { breadcrumb: 'Создать карту' } },
+        { path: 'profile', component: AccountProfileComponent, data: { breadcrumb: 'Профиль' } },
+        { path: 'card/:id', component: AccountCardInfoComponent, data: { breadcrumb: 'Информация о карте' } },
+        { path: 'payments', component: AccountPaymentsComponent, data: { breadcrumb: 'Платежи' } },
     ] },
     
 ];

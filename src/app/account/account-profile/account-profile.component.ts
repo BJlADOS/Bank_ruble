@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { filter, takeUntil } from 'rxjs';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
+import { FormManager } from 'src/app/classes/form-manager/form-manager';
 import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';
 import { DestroyService } from 'src/app/services/destoyService/destroy.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
@@ -33,7 +34,7 @@ export class AccountProfileComponent implements OnInit {
     public ngOnInit(): void {
         this.fs.getUser().pipe(filter((user: IUser | null) => user !== null), takeUntil(this.destory$)).subscribe((user: IUser | null): void => {
             this.user = user!;
-            FormGenerator.getInstance().updateUserForm(this.userForm, user!.firstName, user!.surname, user!.secondName, user!.passport);
+            FormManager.getInstance().updateUserForm(this.userForm, user!.firstName, user!.surname, user!.secondName, user!.passport);
         });
     }
 
@@ -60,7 +61,7 @@ export class AccountProfileComponent implements OnInit {
 
     public cancel(): void {
         this.isError = false;
-        FormGenerator.getInstance().updateUserForm(this.userForm, this.user.firstName, this.user.surname, this.user.secondName, this.user.passport);;
+        FormManager.getInstance().updateUserForm(this.userForm, this.user.firstName, this.user.surname, this.user.secondName, this.user.passport);;
         this.isUserDataFormDisabled = true;
     }
 }

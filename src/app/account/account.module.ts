@@ -10,18 +10,20 @@ import { AccountAccordionContentDirective } from './directives/content/account-a
 import { AccountAccordionItemDirective } from './directives/item/account-accordion-item.directive';
 import { AccountAccordionCardComponent } from './account-left-menu/account-accordion/account-accordion-card/account-accordion-card.component';
 import { AccountAddCardComponent } from './account-add-card/account-add-card.component';
-import { AccountProfileMenuItemComponent } from './account-profile-menu-item/account-profile-menu-item.component';
+import { AccountProfileMenuItemComponent } from './account-left-menu/account-profile-menu-item/account-profile-menu-item.component';
 import { AccountProfileComponent } from './account-profile/account-profile.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AccountProfileDataComponent } from './account-profile/account-profile-data/account-profile-data.component';
 import { AccountProfileEmailComponent } from './account-profile/account-profile-email/account-profile-email.component';
-import { NgxMaskModule, IConfig } from 'ngx-mask';
+import { NgxMaskModule } from 'ngx-mask';
 import { AccountCardInfoComponent } from './account-card-info/account-card-info.component';
 import { CardNumberPipe } from '../pipes/card-number/card-number.pipe';
 import { CvvPipe } from '../pipes/cvv/cvv.pipe';
 import { AccountPaymentsComponent } from './account-payments/account-payments.component';
 import { AccountFastSendComponent } from './account-main/account-fast-send/account-fast-send.component';
 import { NormalizeNumberDirective } from './directives/normalize-number/normalize-number.directive';
+import { AccountHeaderBreadcrumbComponent } from './account-header/account-header-breadcrumb/account-header-breadcrumb.component';
+import { AccountSendSelfComponent } from './account-payments/account-send-self/account-send-self.component';
 
 
 
@@ -46,6 +48,8 @@ import { NormalizeNumberDirective } from './directives/normalize-number/normaliz
         AccountPaymentsComponent,
         AccountFastSendComponent,
         NormalizeNumberDirective,
+        AccountHeaderBreadcrumbComponent,
+        AccountSendSelfComponent,
     ],
     imports: [
         CommonModule,

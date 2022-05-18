@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { BehaviorSubject, Observable, takeUntil } from 'rxjs';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { DestroyService } from 'src/app/services/destoyService/destroy.service';
@@ -23,6 +23,7 @@ export class AccountCardInfoComponent implements OnInit {
 
     constructor(
         private _activatedRoute: ActivatedRoute,
+        private _router: Router,
         private _fs: FirestoreService,
         private _destroy$: DestroyService,
     ) { }
@@ -58,4 +59,7 @@ export class AccountCardInfoComponent implements OnInit {
         return this._fs.isCardDefaultById(card.id);
     }
 
+    public redirectToPayments(defaultCardOverride: string, isSendingSelf: boolean = false): void {
+        this._router.navigate(['/account/payments'], { state: { defaultCardOverride: defaultCardOverride, isSendingSelf: isSendingSelf } });
+    }
 }

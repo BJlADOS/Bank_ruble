@@ -30,21 +30,20 @@
         &__bottom-outlet {
             display: flex;
             margin-bottom: 8px;
-            justify-content: center;
-
-            button {
-                width: 100%;
+            align-items: center;
+            gap: 25px;
+            flex-direction: row;
+            &-item {
                 font-size: larger;
                 border: none;
                 background-color: transparent;
-                cursor: pointer;
                 //border-bottom: 4px solid transparent;
                 position: relative;
                 transition: .2s;
 
                 &:hover {
                     &::after {
-                        width: 90%;
+                        width: 100%;
                     }
                 }
                 padding-bottom: 15px;
@@ -57,7 +56,7 @@
                         position: absolute;
                         display: block;
                         border-bottom: 4px solid rgb(38, 185, 9);
-                        width: 90%;
+                        width: 100%;
                     }
                 }
 
@@ -72,7 +71,6 @@
                     width: 0;
                     transition: .2s;
                 }
-                
             }
         }
 

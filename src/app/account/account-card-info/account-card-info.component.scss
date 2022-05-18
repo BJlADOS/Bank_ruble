@@ -58,7 +58,10 @@
     }
 
     &__button {
-        cursor: pointer;
+        position: relative;
+        font-size: larger;
+        background-color: transparent;
+        border: none;
         border-radius: 10px;
         display: flex;
         flex-direction: row;
@@ -73,7 +76,36 @@
         }
 
         &:hover {
+            cursor: pointer;
             background-color: rgb(223, 223, 223);
+        }
+
+        &:disabled {
+            &::after {
+                transform: translateX(-50%);
+                bottom: 0;
+                left: 50%;
+                content: '';
+                position: absolute;
+                display: block;
+                border-bottom: 2px solid #ca0303;
+                width: 100%;
+            }
+            &:hover {
+                cursor: default;
+                background-color: transparent;
+            }
+        }
+        &::after {
+            transform: translateX(-50%);
+            bottom: 0;
+            left: 50%;
+            content: '';
+            position: absolute;
+            display: block;
+            border-bottom: 2px solid #ca0303;
+            width: 0;
+            transition: .2s;
         }
     }
 

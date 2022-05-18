@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Auth, updateEmail, updateProfile, User } from '@angular/fire/auth';
 import { arrayUnion, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, onSnapshot, query, runTransaction, setDoc, where } from '@angular/fire/firestore';
-import { Functions, FunctionsModule } from '@angular/fire/functions';
 import { FormGroup } from '@angular/forms';
 import { collection, getDocs, Query, QueryDocumentSnapshot, QuerySnapshot, Transaction, Unsubscribe, updateDoc } from 'firebase/firestore';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { CardGenerator } from 'src/app/classes/card-generator/card-generator';
+import { cachedDataVersionTag } from 'v8';
 import { ICard } from './interfaces/Card';
 import { IUser } from './interfaces/User';
 import { CardType } from './types/card-type';
@@ -26,10 +26,7 @@ export class FirestoreService {
     constructor(
         public fs: Firestore,
         public auth: Auth,
-    ) { 
-        
-    }
-
+    ) { }
 
     public async createUser(id: string, email: string): Promise<void> {
         await setDoc(doc(this.fs, 'users', id), {
@@ -87,7 +84,7 @@ export class FirestoreService {
         if (!this.auth.currentUser?.emailVerified) {
             throw new Error('Сначала подтвердите свой email!');
         }
-        const userRef: DocumentReference<DocumentData> = doc(this.fs, 'users', this._user$.value!.id);
+        const userRef: DocumentReference<DocumentData> = this.getUserRef();
 
         const firstName: string = this.normalizeWord(form.get('firstName')!.value);
         const surname: string = this.normalizeWord(form.get('surname')!.value);
@@ -190,6 +187,17 @@ export class FirestoreService {
 
     public getDefaultCard(): BehaviorSubject<ICard | null> {
         return this._cards$.value[this._user$.value!.defaultCard];
+    }
+
+    public getNumberOfBannedCards(): number {
+        let banned: number = 0;
+        for (const card$ of this._cards$.value) {
+            if (card$.value?.isBanned) {
+                banned++;
+            }
+        }
+        
+        return banned;
     }
 
     public async editEmail(newEmail: string): Promise<void> {
@@ -300,7 +308,6 @@ export class FirestoreService {
     }
 
     public async sendMoney(from: string, to: string, amount: number): Promise<void> {
-        console.log(amount);
         const fromRef: DocumentReference<DocumentData> = this.getCardReference(from);
         const toRef: DocumentReference<DocumentData> = this.getCardReference(to);
         try {
@@ -323,7 +330,6 @@ export class FirestoreService {
                 transaction.update(fromRef, { balance: newBalanceFrom });
                 transaction.update(toRef, { balance: newBalanceTo });
             });
-            console.log('Транзакция успешно проведена!');
         } catch(e) {
             throw new Error(`Ошибка транзакции: ${e}`);
         }
@@ -358,19 +364,19 @@ export class FirestoreService {
         return true;
     }
 
-    private normalizeWord(word: string): string {
-        word = word.toLowerCase();
-
-        return `${word[0].toUpperCase()}${word.slice(1)}`;
-    }
-
-    private findCardSubjectdById(id: string): BehaviorSubject<ICard | null> {
+    public findCardSubjectdById(id: string): BehaviorSubject<ICard | null> {
         for (const card$ of this._cards$.value) {
             if (card$.value?.id === id) {
                 return card$;
             }
         }
         throw new Error('карта не найдена');
+    }
+
+    private normalizeWord(word: string): string {
+        word = word.toLowerCase();
+
+        return `${word[0].toUpperCase()}${word.slice(1)}`;
     }
 
     private findIndexOfCard(card: BehaviorSubject<ICard | null>): number {

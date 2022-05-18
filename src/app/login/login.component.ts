@@ -1,7 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { filter, takeUntil } from 'rxjs';
 import { CustomError } from 'src/app/classes/CustomError/CustomError';
 import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';

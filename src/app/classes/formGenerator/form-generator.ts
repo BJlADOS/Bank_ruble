@@ -1,7 +1,5 @@
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { format } from 'path';
-import { BehaviorSubject } from 'rxjs';
-import { FirestoreService } from 'src/app/services/firestore/firestore.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BehaviorSubject, interval } from 'rxjs';
 import { ICard } from 'src/app/services/firestore/interfaces/Card';
 import { CustomValidators } from '../CustomValidators/custom-validators';
 
@@ -95,13 +93,6 @@ export class FormGenerator {
         );
     }
 
-    public updateUserForm(form: FormGroup, firstName: string, surname: string, secondName: string, passport: string): void {
-        form.get('firstName')?.patchValue(firstName);
-        form.get('surname')?.patchValue(surname);
-        form.get('secondName')?.patchValue(secondName);
-        form.get('passport')?.patchValue(passport);
-    }
-
     public getEmptyEmailForm(): FormGroup {
         return this._fb.group(        
             {   
@@ -111,10 +102,6 @@ export class FormGenerator {
                 ])]
             } 
         );
-    }
-
-    public updateEmailForm(form: FormGroup, email: string): void {
-        form.get('email')?.patchValue(email);
     }
 
     public getSendMoneyToCardForm(): FormGroup {
@@ -129,10 +116,6 @@ export class FormGenerator {
         );
     }
 
-    public updateSendMoneyToCardForm(form: FormGroup, cardNumber: string): void {
-        form.get('cardNumber')?.patchValue(cardNumber);
-    }
-
     public getMoneyAmountForm(): FormGroup {
         return this._fb.group(        
             {   
@@ -144,8 +127,17 @@ export class FormGenerator {
         );
     }
 
-    public updateMoneyAmountForm(form:FormGroup, card$: BehaviorSubject<ICard | null>, amount: number | null): void {
-        form.get('card')?.patchValue(card$);  
-        form.get('amount')?.patchValue(amount);  
+    public getSendSelfForm(): FormGroup {
+        return this._fb.group(        
+            {   
+                cardFrom: [null],
+                cardTo: [null, Validators.compose([ 
+                    Validators.required,
+                ])],
+                amount: [null, Validators.compose([ 
+                    Validators.required,
+                ])]
+            } 
+        );
     }
 }

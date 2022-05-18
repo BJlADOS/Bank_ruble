@@ -6,10 +6,12 @@
                 <button class="account__head__container-item__logout" (click)="logOut()">Выйти</button>
             </div>
             <div class="account__head__container-item__bottom-outlet">
-                <button [class.active]="isActive('/account')" routerLink="/account">Главная</button>
-                <button>but</button>
-                <button>but</button>
-                <button>but</button>
+                <div class="account__head__container-item__bottom-outlet-item" [class.active]="isActive('/account')">
+                    <app-account-header-breadcrumb url="/account" label="Главная"></app-account-header-breadcrumb>
+                </div>
+                <div class="account__head__container-item__bottom-outlet-item" *ngFor="let breadcrumb of breadcrumbs" [class.active]="isActive(breadcrumb.url)">
+                    <app-account-header-breadcrumb [url]="breadcrumb.url" [label]="breadcrumb.label"></app-account-header-breadcrumb>
+                </div>
             </div>
         </div>
     </div>

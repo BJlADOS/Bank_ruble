@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { filter, takeUntil } from 'rxjs';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
+import { FormManager } from 'src/app/classes/form-manager/form-manager';
 import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';
 import { AuthService } from 'src/app/services/authService/auth.service';
 import { DestroyService } from 'src/app/services/destoyService/destroy.service';
@@ -37,7 +38,7 @@ export class AccountProfileEmailComponent implements OnInit {
     public ngOnInit(): void {
         this.fs.getUser().pipe(filter((user: IUser | null) => user !== null), takeUntil(this.destroy$)).subscribe((user: IUser | null): void => {
             this.user = user!;
-            FormGenerator.getInstance().updateEmailForm(this.emailForm, user!.email);
+            FormManager.getInstance().updateEmailForm(this.emailForm, user!.email);
             this.isEmailVerified = this.auth.isEmailVerified;
         });
     }
@@ -75,7 +76,7 @@ export class AccountProfileEmailComponent implements OnInit {
 
     public cancel(): void {
         this.hasError = false;
-        FormGenerator.getInstance().updateEmailForm(this.emailForm, this.user.email);;
+        FormManager.getInstance().updateEmailForm(this.emailForm, this.user.email);;
         this.isEmailFormDisabled = true;
     }
 
@@ -90,7 +91,8 @@ export class AccountProfileEmailComponent implements OnInit {
         if (/текущий/.test(errorMessage)) {
             return 'Вы ввели свой текущий email!';
         }
-
-        return 'Неизветсная ошибка, попробуйте снова';
+        console.log(errorMessage);
+        
+        return 'Неизвестная ошибка, попробуйте снова';
     }
 }

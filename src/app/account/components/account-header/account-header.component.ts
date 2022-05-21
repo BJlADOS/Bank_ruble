@@ -4,7 +4,7 @@ import { filter, takeUntil } from 'rxjs';
 import { IBreadcrumb } from 'src/app/interfaces/breadcrumb/breadcrumb';
 import { AuthService } from 'src/app/services/authService/auth.service';
 import { DestroyService } from 'src/app/services/destoyService/destroy.service';
-import { AccountHeaderBreadcrumbComponent } from './account-header-breadcrumb/account-header-breadcrumb.component';
+import { AccountHeaderBreadcrumbComponent } from '../account-header-breadcrumb/account-header-breadcrumb.component';
 
 @Component({
     selector: 'app-account-header',

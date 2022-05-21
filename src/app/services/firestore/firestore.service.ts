@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Auth, updateEmail, updateProfile, User } from '@angular/fire/auth';
-import { arrayUnion, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, onSnapshot, query, runTransaction, setDoc, where } from '@angular/fire/firestore';
+import { arrayRemove, arrayUnion, deleteDoc, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, onSnapshot, query, runTransaction, setDoc, where } from '@angular/fire/firestore';
 import { FormGroup } from '@angular/forms';
-import { collection, getDocs, Query, QueryDocumentSnapshot, QuerySnapshot, Transaction, Unsubscribe, updateDoc } from 'firebase/firestore';
+import { collection, FieldValue, getDocs, Query, QueryDocumentSnapshot, QuerySnapshot, Transaction, Unsubscribe, updateDoc } from 'firebase/firestore';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { CardGenerator } from 'src/app/classes/card-generator/card-generator';
@@ -182,11 +182,14 @@ export class FirestoreService {
                 return card$.asObservable();
             }
         }
-        throw new Error('Карта не найдена');
+        throw new Error('Карта не найдена!');
     }
 
     public getDefaultCard(): BehaviorSubject<ICard | null> {
-        return this._cards$.value[this._user$.value!.defaultCard];
+        if (this._cards$.value[this._user$.value!.defaultCard]) {
+            return this._cards$.value[this._user$.value!.defaultCard];
+        }
+        throw new Error('У вас нету доступных карт!');
     }
 
     public getNumberOfBannedCards(): number {
@@ -276,8 +279,8 @@ export class FirestoreService {
         });
     }
 
-    public setDefaultCardById(id: string): void {
-        this.updateUserDefaultCard(this.findIndexOfCard(this.findCardSubjectdById(id)));
+    public async setDefaultCardById(id: string): Promise<void> {
+        await this.updateUserDefaultCard(this.findIndexOfCard(this.findCardSubjectdById(id)));
     }
 
     public isAllcardsBanned(): boolean {
@@ -295,12 +298,12 @@ export class FirestoreService {
         if (this.isCardDefaultById(card.id) && !card.isBanned) {
             for (const card$ of this._cards$.value) {
                 if (!card$.value?.isBanned && card$.value?.id !== card.id) {
-                    await this.updateUserDefaultCard(this.findIndexOfCard(card$));
+                    await this.setDefaultCardById(card$.value!.id);
                     break;
                 }
             }
         } else if(card.isBanned && this.isAllcardsBanned()) {
-            await this.updateUserDefaultCard(this.findIndexOfCard(this.findCardSubjectdById(card.id)));
+            await this.setDefaultCardById(card.id);
         }
         await updateDoc(cardRef, {
             isBanned: !card.isBanned
@@ -334,6 +337,16 @@ export class FirestoreService {
             throw new Error(`Ошибка транзакции: ${e}`);
         }
 
+    }
+
+    public async deleteCard(cardNumber: string, id: string): Promise<void> {
+        const cardRef: DocumentReference<DocumentData> = this.getCardReference(cardNumber);
+        const userRef: DocumentReference<DocumentData> = this.getUserRef();
+        const index: number = this.findIndexOfCard(this.findCardSubjectdById(id));
+        await updateDoc(userRef, {
+            cards: arrayRemove(cardRef)
+        });
+        await deleteDoc(cardRef);
     }
 
     public logout(): void {

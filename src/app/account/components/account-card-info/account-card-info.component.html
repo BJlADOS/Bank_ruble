@@ -31,6 +31,10 @@
             <img src="assets/img/add-money.svg" alt="addMoney">
             <p>Пополнить карту</p>
         </button>
+        <button class="card-info__button" [class.disabled]="card.isBanned" [disabled]="card.isBanned" (click)="setCardAsDefault(card.id)">
+            <img src="assets/img/set-card-as-main.svg" alt="setCardAsMainCard">
+            <p>Сделать картой по умолчанию</p>
+        </button>
         <button *ngIf="!card.isBanned" class="card-info__button" (click)="toggleBan(card)">
             <img src="assets/img/ban-card.svg" alt="banCard">
             <p>Заблокировать</p>
@@ -38,6 +42,10 @@
         <button *ngIf="card.isBanned" class="card-info__button" (click)="toggleBan(card)">
             <img src="assets/img/unban-card.svg" alt="unbanCard">
             <p>Разблокировать</p>
+        </button>
+        <button class="card-info__button" (click)="deleteCard(card.cardNumber, card.id)">
+            <img src="assets/img/delete-card.svg" alt="deleteCard">
+            <p>Удалить карту</p>
         </button>
     </div>
 </div>

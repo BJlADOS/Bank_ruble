@@ -44,11 +44,13 @@ export class LoginComponent implements OnInit {
         private _router: Router,
         private _destroy$: DestroyService,
     ) {
+        if (_router.getCurrentNavigation()?.extras.state) {
+            this.redirect = _router.getCurrentNavigation()?.extras.state!['redirectTo'];
+        }
     }
 
     public ngOnInit(): void {
         this.route.queryParams.pipe(takeUntil(this._destroy$)).subscribe((params: Params): void => {
-            this.redirect = params['redirectTo'];
             if (params['actualState']) {
                 this.updateRoute(params['actualState']);
             } else {

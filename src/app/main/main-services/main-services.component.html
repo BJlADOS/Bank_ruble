@@ -3,12 +3,12 @@
         <h2>Сервисы и услуги</h2>
     </div>
     <div class="main__services__content">
-        <div *ngFor="let service of services" class="main__services__content__item">   
+        <div *ngFor="let service of services" class="main__services__content__item" (click)="redirectTo(service.link)">   
                    
             <div class="main__services__content__item-image">
                 <img [src]="service.icon" [alt]="service.iconAlt">
             </div>
-            <div class="main__services__content__item-text">
+            <div class="main__services__content__item-text" >
                 <h3>{{service.name}}</h3>
                 <p>{{service.description}}</p>
             </div>

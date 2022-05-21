@@ -19,7 +19,9 @@ import { FirestoreService } from './services/firestore/firestore.service';
 import { LoginRUPipe } from './pipes/login-ru/login-ru.pipe';
 import { AuthService } from './services/authService/auth.service';
 import { provideFunctions,getFunctions } from '@angular/fire/functions';
-import { AccountSendSelfComponent } from './account/account-payments/account-send-self/account-send-self.component';
+import { AccountSendSelfComponent } from './account/components/account-send-self/account-send-self.component';
+import { ModalDeleteCardComponent } from './account/components/modal-delete-card/modal-delete-card.component';
+import { ModalContainerComponent } from './account/components/modal-container/modal-container.component';
 
 
 @NgModule({

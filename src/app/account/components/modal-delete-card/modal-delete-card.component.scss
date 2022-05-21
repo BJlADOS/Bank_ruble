@@ -1,0 +1,90 @@
+.modal {
+    &-dialog {
+        z-index: 1200;
+        position: absolute;
+        left: 50%;
+        top: 40%;
+        transform: translate(-50%, -50%);
+        width: fit-content;
+        margin: 10px;
+    }
+
+    &-content {
+        border-radius: 8px;
+        background-clip: padding-box;
+        border: 1px solid rgb(221, 221, 221);
+        box-shadow: 3px 9px rgb(0 0 0 / 50%);
+        background-color: #fff;
+    }
+
+    &-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            align-items: center;
+            vertical-align: middle;
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+
+            img {
+                height: 100%;
+                width: 100%;
+            }
+
+            &:hover {
+                background-color: rgb(182, 182, 182);
+            }
+        }
+
+        padding: 15px;
+        border-bottom: 1px solid rgb(182, 182, 182);
+    }
+
+    &-body {
+        position: relative;
+        padding: 15px;
+
+        &-warning {
+            color: red;
+            font-size: larger;
+            margin-bottom: 15px;
+        }
+    }
+
+    &-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        padding: 15px;
+        border-top: 1px solid rgb(182, 182, 182);
+    }
+}
+
+.button {
+    font-size: larger;
+    cursor: pointer;
+    padding: 7px 10px;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    &.close {
+        background-color: #26b909;
+        &:hover {
+            background-color: #288525;
+        }
+    }
+    &.confirm {
+        background-color: #ca0303;
+        &:hover {
+            background-color: #7a0606;
+        }
+    }
+}

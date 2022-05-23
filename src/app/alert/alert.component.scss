@@ -1,0 +1,35 @@
+.container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    bottom: 0;
+    right: 0;
+    z-index: 1300;
+    font-size: larger;
+    overflow: hidden;
+}
+
+.alert {
+    position: relative;
+    padding: 7px;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    align-items: flex-start;
+    transition: 1s ease-in;
+    
+    &.alert-success {
+        border: 2px solid rgb(38, 185, 9);
+        background-color: rgba(38, 185, 9, 0.2);
+        border-right: none;
+        border-radius: 5px 0 0 5px;
+    }
+
+    &.alert-error {
+        border: 2px solid rgb(185, 8, 8);
+        background-color: rgba(185, 8, 8, 0.2);
+        border-right: none;
+        border-radius: 5px 0 0 5px;
+    }
+}

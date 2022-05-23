@@ -1,13 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Router, ActivatedRoute, Data } from '@angular/router';
-import { BehaviorSubject, filter, takeUntil } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
+import { BehaviorSubject, takeUntil } from 'rxjs';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
 import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { DestroyService } from 'src/app/services/destoyService/destroy.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
 import { ICard } from 'src/app/services/firestore/interfaces/Card';
+import { TransactionType } from 'src/app/services/firestore/interfaces/transaction';
 
 @Component({
     selector: 'app-account-send-self',
@@ -21,18 +23,17 @@ export class AccountSendSelfComponent implements OnInit {
 
     public sendSelfForm: FormGroup = FormGenerator.getInstance().getSendSelfForm();
     public isMoneySended: boolean = false;
-    public successMessage: string | undefined;
-    public errorMessage: string | undefined;
     public isEnoughMoneyError: string | undefined;
     @Input() public defaultCardOverride: string | undefined = undefined;
     @Input() public isExpanded: boolean = false;
 
-    constructor(        
+    constructor(
         public fs: FirestoreService,
         public router: Router,
         public activatedRoute: ActivatedRoute,
+        public alert: AlertService,
         private _destroy$: DestroyService
-    ) { 
+    ) {
         if (this.router.getCurrentNavigation()?.extras.state) {
             this.defaultCardOverride = this.router.getCurrentNavigation()?.extras.state!['defaultCardOverride'];
             this.isExpanded = this.router.getCurrentNavigation()?.extras.state!['isSendingSelf'];
@@ -58,17 +59,14 @@ export class AccountSendSelfComponent implements OnInit {
 
     public sendMoney(): void {
         this.isMoneySended = true;
-        this.fs.sendMoney((this.sendSelfForm.get('cardFrom')?.value as BehaviorSubject<ICard | null>).value!.cardNumber, (this.sendSelfForm.get('cardTo')?.value as BehaviorSubject<ICard | null>).value!.cardNumber, this.sendSelfForm.get('amount')?.value).then(() => {
-            this.successMessage = 'Перевод выполнен успешно';
-            this.errorMessage = undefined;
-            setTimeout(() => {
-                this.isMoneySended = false;
-                this.resetMoney();
-                this.successMessage = undefined;
-                this.isExpanded = !this.isExpanded;
-            }, 1000);
+        this.fs.sendMoney((this.sendSelfForm.get('cardFrom')?.value as BehaviorSubject<ICard | null>).value!.cardNumber, (this.sendSelfForm.get('cardTo')?.value as BehaviorSubject<ICard | null>).value!.cardNumber, this.sendSelfForm.get('amount')?.value, TransactionType.self).then(() => {
+            this.isExpanded = !this.isExpanded;
+            this.alert.success('Перевод выполнен успешно');
+            this.isMoneySended = false;
+            this.resetMoney();
+            this.sendSelfForm.get('cardTo')?.patchValue(null);
         }).catch((error: Error) => {
-            this.errorMessage = error.message;
+            this.alert.error(error.message);
             this.isMoneySended = false;
         });
     }
@@ -80,7 +78,6 @@ export class AccountSendSelfComponent implements OnInit {
 
     public cancel(): void {
         this.isMoneySended = false;
-        this.errorMessage = undefined;
         this.isExpanded = false;
         this.resetMoney();
     }
@@ -89,7 +86,7 @@ export class AccountSendSelfComponent implements OnInit {
         FormManager.getInstance().updateMoneyInSendSelfForm(this.sendSelfForm, null);
     }
 
-    private resetCardSelect(): void {      
+    private resetCardSelect(): void {
         if (this.defaultCardOverride) {
             FormManager.getInstance().updateCardsInSendSelfForm(this.sendSelfForm, this.fs.findCardSubjectdById(this.defaultCardOverride));
         } else {

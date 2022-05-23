@@ -1,6 +1,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Alert } from 'src/app/classes/alert/alert';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
 import { CardType } from 'src/app/services/firestore/types/card-type';
 
@@ -19,32 +21,24 @@ import { CardType } from 'src/app/services/firestore/types/card-type';
 })
 export class AccountAddCardComponent {
 
-    public successMessage: string = '';
-    public errorMessage: string = '';
-    public isError: boolean = false;
-    public isSuccess: boolean = false;
     public isButtonsDisabled: boolean = false;
 
     constructor(
         private _fs: FirestoreService,
-        private _router: Router
+        private _router: Router,
+        public alert: AlertService,
     ) { }
 
     public createCard(type: CardType): void {
         this.isButtonsDisabled = !this.isButtonsDisabled;
         this._fs.createCard(type).then(() => {
-            this.isError = false;
-            this.isSuccess = true;
-            this.successMessage = 'Карта успешно создана';
+            this.alert.success('Карта успешно создана');
             setTimeout(() => {
                 this._router.navigate(['/account']);
-            }, 2000);   
-        }       
-        )
-            .catch((error: Error) => {
-                this.isButtonsDisabled = !this.isButtonsDisabled;
-                this.errorMessage = error.message;
-                this.isError = true;
-            });
+            }, 2000);
+        }).catch((error: Error) => {
+            this.isButtonsDisabled = !this.isButtonsDisabled;
+            this.alert.error(error.message);
+        });
     }
 }

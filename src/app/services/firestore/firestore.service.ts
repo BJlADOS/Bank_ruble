@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Auth, updateEmail, updateProfile, User } from '@angular/fire/auth';
-import { arrayRemove, arrayUnion, deleteDoc, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, onSnapshot, query, runTransaction, setDoc, where } from '@angular/fire/firestore';
+import { addDoc, arrayRemove, arrayUnion, deleteDoc, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, onSnapshot, query, runTransaction, setDoc, where } from '@angular/fire/firestore';
 import { FormGroup } from '@angular/forms';
-import { collection, FieldValue, getDocs, Query, QueryDocumentSnapshot, QuerySnapshot, Transaction, Unsubscribe, updateDoc } from 'firebase/firestore';
+import { collection, FieldValue, getDocs, Query, QueryDocumentSnapshot, QuerySnapshot, Timestamp, Transaction, Unsubscribe, updateDoc } from 'firebase/firestore';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { CardGenerator } from 'src/app/classes/card-generator/card-generator';
 import { cachedDataVersionTag } from 'v8';
 import { ICard } from './interfaces/Card';
+import { IDeletedCard } from './interfaces/deleted-card';
+import { ITransaction, ITransactionTarget, TransactionType } from './interfaces/transaction';
 import { IUser } from './interfaces/User';
 import { CardType } from './types/card-type';
 
@@ -22,6 +24,7 @@ export class FirestoreService {
     private _subsription!: Unsubscribe;
     private _cards$: BehaviorSubject<Array<BehaviorSubject<ICard | null>>> = new BehaviorSubject<Array<BehaviorSubject<ICard | null>>>([]);
     private _cardSubs: Unsubscribe[] = [];
+    private _historySub!: Unsubscribe;
 
     constructor(
         public fs: Firestore,
@@ -144,6 +147,7 @@ export class FirestoreService {
         for(const sub of this._cardSubs) {
             sub();
         }
+        this.unsubFromHistory(); 
     }
 
     public async updateEmail(actualEmail: string): Promise<void> {
@@ -160,6 +164,10 @@ export class FirestoreService {
         const cardSnap: DocumentSnapshot<DocumentData> = await getDoc(cardDoc);
 
         if (cardSnap.exists()) {
+            if ((cardSnap.data() as ICard).isBanned) {
+                throw new Error('Эта карта заблокирована');
+            }
+
             return true;
         }
         throw new Error('Такой карты не существует!');
@@ -310,7 +318,7 @@ export class FirestoreService {
         });
     }
 
-    public async sendMoney(from: string, to: string, amount: number): Promise<void> {
+    public async sendMoney(from: string, to: string, amount: number, type: TransactionType): Promise<void> {
         const fromRef: DocumentReference<DocumentData> = this.getCardReference(from);
         const toRef: DocumentReference<DocumentData> = this.getCardReference(to);
         try {
@@ -323,13 +331,16 @@ export class FirestoreService {
                 if (!toSnap.exists()) {
                     throw 'Такой карты не существует';
                 }
-                const balanceFrom: number = (fromSnap.data() as ICard).balance;
+                const fromCard: ICard = fromSnap.data() as ICard;
+                const toCard: ICard = toSnap.data() as ICard;
+                const balanceFrom: number = fromCard.balance;
                 if (balanceFrom < amount) {
                     throw 'Недостаточно средств';
                 }
-                
-                const newBalanceFrom: number = parseFloat(((fromSnap.data() as ICard).balance - amount).toFixed(2));
-                const newBalanceTo: number = parseFloat(((toSnap.data() as ICard).balance + amount).toFixed(2));
+                await this.addTransactionToHistory(toCard, fromCard, amount, type);
+
+                const newBalanceFrom: number = parseFloat((fromCard.balance - amount).toFixed(2));
+                const newBalanceTo: number = parseFloat((toCard.balance + amount).toFixed(2));
                 transaction.update(fromRef, { balance: newBalanceFrom });
                 transaction.update(toRef, { balance: newBalanceTo });
             });
@@ -342,11 +353,83 @@ export class FirestoreService {
     public async deleteCard(cardNumber: string, id: string): Promise<void> {
         const cardRef: DocumentReference<DocumentData> = this.getCardReference(cardNumber);
         const userRef: DocumentReference<DocumentData> = this.getUserRef();
-        const index: number = this.findIndexOfCard(this.findCardSubjectdById(id));
+        const card: ICard = this.findCardSubjectdById(id).value!;
         await updateDoc(userRef, {
             cards: arrayRemove(cardRef)
         });
+        if (card.balance > 0) {
+            const deletedCard: IDeletedCard = {
+                cardNumber: card.cardNumber,
+                expirationDate: card.expirationDate,
+                owner: card.owner,
+                cvv: card.cvv,
+                name: card.name,
+                balance: card.balance,
+                id: card.id,
+                ownerPassport: this._user$.value!.passport
+            };
+            await setDoc(doc(this.fs, 'deleted cards', cardNumber), deletedCard);
+        }
         await deleteDoc(cardRef);
+    }
+
+    public getCardHistory(cardId: string): Observable<Array<DocumentReference<DocumentData>>> {
+        this.unsubFromHistory();
+        const card: BehaviorSubject<ICard | null> = this.findCardSubjectdById(cardId);
+        const cardHistory: DocumentReference<DocumentData> = doc(this.fs, 'cards history', card.value!.cardNumber);
+        const history: BehaviorSubject<Array<DocumentReference<DocumentData>>> = new BehaviorSubject<Array<DocumentReference<DocumentData>>>([]);
+        this._historySub = onSnapshot(cardHistory, { includeMetadataChanges: true }, (cardHist: DocumentSnapshot<DocumentData>) => {
+            if (cardHist.exists()) {
+                history.next((cardHist.data()!['transactions'] as Array<DocumentReference<DocumentData>>).reverse());
+            }                 
+        });
+
+        return history.asObservable();
+    }
+
+    public async loadTransactions(history: Array<DocumentReference<DocumentData>>, numberOfLoadedTransactions: number, step: number): Promise<ITransaction[]> {
+        const transactions: ITransaction[] = [];
+        const endIndex: number = numberOfLoadedTransactions + step > history.length ? history.length: numberOfLoadedTransactions + step; 
+        const historySlice: Array<DocumentReference<DocumentData>> = history.slice(numberOfLoadedTransactions, endIndex);
+        for (const transaction of historySlice) {
+            const transactSnap: DocumentSnapshot<DocumentData> = await getDoc(transaction);
+            transactions.push(transactSnap.data() as ITransaction);
+        }
+
+        return transactions;
+    }
+
+    public unsubFromHistory(): void {
+        if (this._historySub) {
+            this._historySub();
+        }  
+    }
+
+    public async getTransactionTarget(targetNumber: string, type: TransactionType): Promise<ITransactionTarget> {
+        let icon: string = '';
+        switch(type) {
+            case TransactionType.self: 
+                icon = 'assets/img/transaction-self.svg';
+                break;
+            case TransactionType.to:
+                icon = 'assets/img/transaction.svg';
+                break;
+        }
+        if (type === TransactionType.self || type === TransactionType.to) {
+            const card: ICard = (await getDoc(this.getCardReference(targetNumber))).data() as ICard;
+            let name: string = card.name;
+            if (type === TransactionType.to) {
+                const user: IUser = await this.findCardOwner(targetNumber);
+                name += ` (${user.surname} ${user.firstName} ${user.secondName})`;
+            }
+
+            return {
+                name: name,
+                number: card.cardNumber,
+                icon: icon,
+            };
+        }
+        throw new Error('Услуги ещё не добавлены');
     }
 
     public logout(): void {
@@ -384,6 +467,37 @@ export class FirestoreService {
             }
         }
         throw new Error('карта не найдена');
+    }
+
+    private async addTransactionToHistory(toCard: ICard, fromCard: ICard, amount: number, type: TransactionType): Promise<void> {
+        const history: ITransaction = {
+            from: fromCard.cardNumber,
+            to: toCard.cardNumber,
+            type: type,
+            amount: amount,
+            timestamp: Timestamp.now(),
+        };
+        const transationsRef: DocumentReference<DocumentData> = await addDoc(collection(this.fs, 'transactions'), history);
+        const cardFromHistoryRef: DocumentReference<DocumentData> = doc(this.fs, 'cards history', fromCard.cardNumber);
+        const cardToHistoryRef: DocumentReference<DocumentData> = doc(this.fs, 'cards history', toCard.cardNumber);
+        if (!(await getDoc(cardToHistoryRef)).exists()) {
+            await setDoc(cardToHistoryRef, {
+                transactions: [transationsRef]
+            });
+        } else {
+            await updateDoc(cardToHistoryRef, {
+                transactions: arrayUnion(transationsRef)
+            });
+        }
+        if (!(await getDoc(cardFromHistoryRef)).exists()) {
+            await setDoc(cardFromHistoryRef, {
+                transactions: [transationsRef]
+            });
+        } else {
+            await updateDoc(cardFromHistoryRef, {
+                transactions: arrayUnion(transationsRef)
+            });
+        }
     }
 
     private normalizeWord(word: string): string {

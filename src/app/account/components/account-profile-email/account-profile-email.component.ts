@@ -4,6 +4,7 @@ import { filter, takeUntil } from 'rxjs';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
 import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { AuthService } from 'src/app/services/authService/auth.service';
 import { DestroyService } from 'src/app/services/destoyService/destroy.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
@@ -24,15 +25,14 @@ export class AccountProfileEmailComponent implements OnInit {
     public isEmailFormDisabled: boolean = true;
     public isSubmitDisabled: boolean = false;
     public isEmailFormEdited: boolean = false;
-    public hasError: boolean = false;
-    public errorMessage: string = '';
     public emailVerificationStatus: string = '';
     public isEmailVerified: boolean = false;
 
     constructor(
         public fs: FirestoreService,
         public destroy$: DestroyService,
-        public auth: AuthService
+        public auth: AuthService,
+        public alert: AlertService,
     ) { }
 
     public ngOnInit(): void {
@@ -52,30 +52,25 @@ export class AccountProfileEmailComponent implements OnInit {
         console.log('submitted');
         this.isSubmitDisabled = true;
         this.fs.editEmail(this.emailForm.get('email')!.value).then(() => {
-            this.hasError = false;
             this.isEmailFormDisabled = true;
             this.isSubmitDisabled = false;
             this.isEmailFormEdited = true;
         }).catch((error: Error) => {
-            this.hasError = true;
             this.isSubmitDisabled = false;
-            this.errorMessage = this.parseError(error.message);
+            this.alert.error(this.parseError(error.message));
         });
     }
 
     public sendEmailVerification(): void {
         this.auth.sendEmailVerification().then(() => {
-            this.hasError = false;
             this.isEmailFormEdited = true;
         }).catch((error: Error) => {
             this.isEmailFormEdited = false;
-            this.hasError = true;
-            this.errorMessage = this.parseError(error.message);
+            this.alert.error(this.parseError(error.message));
         });
     }
 
     public cancel(): void {
-        this.hasError = false;
         FormManager.getInstance().updateEmailForm(this.emailForm, this.user.email);;
         this.isEmailFormDisabled = true;
     }
@@ -91,7 +86,6 @@ export class AccountProfileEmailComponent implements OnInit {
         if (/текущий/.test(errorMessage)) {
             return 'Вы ввели свой текущий email!';
         }
-        console.log(errorMessage);
         
         return 'Неизвестная ошибка, попробуйте снова';
     }

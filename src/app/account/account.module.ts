@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { LOCALE_ID, NgModule } from '@angular/core';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { AccountComponent } from './components/account-component/account.component';
 import { accountRouting } from './account-routing.module';
 import { AccountHeaderComponent } from './components/account-header/account-header.component';
@@ -25,9 +25,10 @@ import { NormalizeNumberDirective } from './directives/normalize-number/normaliz
 import { AccountHeaderBreadcrumbComponent } from './components/account-header-breadcrumb/account-header-breadcrumb.component';
 import { AccountSendSelfComponent } from './components/account-send-self/account-send-self.component';
 import { ModalDeleteCardComponent } from './components/modal-delete-card/modal-delete-card.component';
+import { CardHistoryItemComponent } from './components/card-history-item/card-history-item.component';
+import localeRU from '@angular/common/locales/ru';
 
-
-
+registerLocaleData(localeRU, 'ru');
 @NgModule({
     declarations: [
         AccountComponent,
@@ -52,6 +53,7 @@ import { ModalDeleteCardComponent } from './components/modal-delete-card/modal-d
         AccountHeaderBreadcrumbComponent,
         AccountSendSelfComponent,
         ModalDeleteCardComponent,
+        CardHistoryItemComponent,
     ],
     imports: [
         CommonModule,
@@ -59,6 +61,9 @@ import { ModalDeleteCardComponent } from './components/modal-delete-card/modal-d
         accountRouting,
         NgxMaskModule.forRoot(),
     ],
-    bootstrap: [AccountComponent]
+    bootstrap: [AccountComponent],
+    providers: [
+        { provide: LOCALE_ID, useValue: 'ru' }
+    ]
 })
 export class AccountModule { }

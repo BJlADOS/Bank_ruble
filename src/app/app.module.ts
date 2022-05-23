@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -22,6 +22,10 @@ import { provideFunctions,getFunctions } from '@angular/fire/functions';
 import { AccountSendSelfComponent } from './account/components/account-send-self/account-send-self.component';
 import { ModalDeleteCardComponent } from './account/components/modal-delete-card/modal-delete-card.component';
 import { ModalContainerComponent } from './account/components/modal-container/modal-container.component';
+import { CardHistoryItemComponent } from './account/components/card-history-item/card-history-item.component';
+import { AlertComponent } from './alert/alert.component';
+import { DestroyService } from './services/destoyService/destroy.service';
+import { GlobalErrorHandlerService } from './services/global-error-handler/global-error-handler.service';
 
 
 @NgModule({
@@ -30,6 +34,7 @@ import { ModalContainerComponent } from './account/components/modal-container/mo
         LoginComponent,
         InputCheckDirective,
         LoginRUPipe,
+        AlertComponent,
     ],
     imports: [
         BrowserModule,
@@ -46,6 +51,9 @@ import { ModalContainerComponent } from './account/components/modal-container/mo
     providers: [
         FirestoreService,
         AuthService,
+        DestroyService,
+        GlobalErrorHandlerService,
+        { provide: ErrorHandler, useClass: GlobalErrorHandlerService },
     ],
     bootstrap: [AppComponent]
 })

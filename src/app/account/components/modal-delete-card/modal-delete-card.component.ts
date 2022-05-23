@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { textAppears } from 'src/app/animations/text-appears/text-appers';
 import { Modal } from 'src/app/classes/modal/modal';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
 
 @Component({
@@ -18,6 +19,7 @@ export class ModalDeleteCardComponent extends Modal {
     private _cardNumber: string = '';
     
     constructor(
+        public alert: AlertService,
         private _fs: FirestoreService,
         private _router: Router,
     ) {
@@ -32,6 +34,7 @@ export class ModalDeleteCardComponent extends Modal {
     public confirm(): void {
         this._fs.deleteCard(this._cardNumber ,this._cardId).then(() => {
             this._router.navigate(['/account']);
+            this.alert.success('Карта успешно удалена');
         });
         this.close('confirm');
     }

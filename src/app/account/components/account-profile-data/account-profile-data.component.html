@@ -90,13 +90,6 @@
                 <input type="submit" value="Сохранить" [disabled]="userForm.invalid || isSubmitDisabled">
                 <button type="button" (click)="cancel()">Отмена</button>
             </div>
-            <div class="form__success" [@contentExpansion]="isUserDataEdited ? 'expanded':'collapsed'">
-                <label>Сохранено!</label>
-            </div>
-            <div class="form__error" [@contentExpansion]="isError ? 'expanded':'collapsed'"
-                [class.padding-top]="isError">
-                <label>{{errorMessage}}</label>
-            </div>
         </form>
     </div>
 </div>

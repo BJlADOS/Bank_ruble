@@ -51,12 +51,6 @@
                 <input type="submit" value="Перевести" [disabled]="sendSelfForm.invalid || isMoneySended || isEnoughMoneyError">
                 <button type="button" class="form__cancel" (click)="cancel()">Отмена</button>
             </div>
-            <div class="form__success" [@contentExpansion]="successMessage ? 'expanded':'collapsed'">
-                <label>{{ successMessage }}</label>
-            </div>
-            <div class="form__error" [@contentExpansion]="errorMessage ? 'expanded':'collapsed'">
-                <label>{{ errorMessage }}</label>
-            </div>
             <div class="form__error" [@contentExpansion]="isEnoughMoneyError ? 'expanded':'collapsed'">
                 <label>{{ isEnoughMoneyError }}</label>
             </div>

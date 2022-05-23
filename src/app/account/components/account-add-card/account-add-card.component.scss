@@ -46,20 +46,4 @@
         margin-bottom: 10px;
     }
 
-    &__message {
-        width: 100%;
-        text-align: center;
-        p {
-            border-radius: 10px;
-        }
-        &-error {
-            color: #dd3a3a
-        }
-
-        &-success {
-            color: #0bc047
-        }
-        color: #fff;
-    }
-
 }

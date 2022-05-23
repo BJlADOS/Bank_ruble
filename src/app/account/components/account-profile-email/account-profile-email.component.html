@@ -34,10 +34,6 @@
                 <div class="form__success" [@contentExpansion]="isEmailFormEdited ? 'expanded':'collapsed'">
                     <label>Подтверждение отправлено вам на почту</label>
                 </div>
-                <div class="form__error" [@contentExpansion]="hasError ? 'expanded':'collapsed'"
-                    [class.padding-top]="hasError">
-                    <label>{{errorMessage}}</label>
-                </div>
         </form>
     </div>
 </div>

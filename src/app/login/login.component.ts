@@ -7,6 +7,7 @@ import { CustomError } from 'src/app/classes/CustomError/CustomError';
 import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';
 import { AuthService } from 'src/app/services/authService/auth.service';
 import { State } from 'src/app/shared/types/State';
+import { AlertService } from '../services/alert/alert.service';
 import { DestroyService } from '../services/destoyService/destroy.service';
 
 @Component({
@@ -32,14 +33,12 @@ export class LoginComponent implements OnInit {
     public signUpForm: FormGroup = FormGenerator.getInstance().getSignUpForm();
     public signInForm: FormGroup = FormGenerator.getInstance().getSignInForm();
     public forgotPasswordForm: FormGroup = FormGenerator.getInstance().getForgotPasswordForm();
-    public signInError: CustomError = new CustomError('', false);
-    public signUpError: CustomError = new CustomError('', false);
-    public forgotPasswordError: CustomError = new CustomError('', false);
     public forgotPasswordEmailSent: boolean = false;
     public isSubmitDisabled: boolean = false;
 
     constructor(
         public route: ActivatedRoute,
+        public alert: AlertService,
         private _auth: AuthService,
         private _router: Router,
         private _destroy$: DestroyService,
@@ -66,12 +65,10 @@ export class LoginComponent implements OnInit {
         this._auth.register(email, password).then(() => {
             this.switchSubmit();
             this._auth.sendEmailVerification();
-            this.signUpError.state = false;
             this._router.navigate(['/account']);
-        }).catch((error: Error): void => {
+        }).catch(() => {
             this.switchSubmit();
-            this.signUpError.state = true;
-            this.signUpError.message = 'Невозможно зарегистрировать аккаунт на данный email';
+            this.alert.error('Невозможно зарегистрировать аккаунт на данный email');
         });
     }
 
@@ -81,7 +78,6 @@ export class LoginComponent implements OnInit {
         const email: string = this.signInForm.controls['email'].value;
         this._auth.login(email, password).then(() => {
             this.switchSubmit();
-            this.signInError.state = false;
             if (this.redirect) {
                 this._router.navigate([this.redirect]);
             } else {
@@ -89,11 +85,10 @@ export class LoginComponent implements OnInit {
             }
         }).catch((error: Error) => {
             this.switchSubmit();
-            this.signInError.state = true;
             if (/user-disabled/.test(error.message)) {
-                this.signInError.message = 'Ваш аккаунт заблокирован';
+                this.alert.error('Ваш аккаунт заблокирован');
             } else {
-                this.signInError.message = 'Неверный email или пароль';
+                this.alert.error('Неверный email или пароль');
             }
         });
     }
@@ -104,14 +99,12 @@ export class LoginComponent implements OnInit {
         this._auth.sendPasswordResetEmail(email)
             .then(() => {
                 this.switchSubmit();
-                this.forgotPasswordError.state = false;
                 this.forgotPasswordEmailSent = true;
             })
             .catch((error: Error) => {
                 this.switchSubmit();
-                this.forgotPasswordError.state = true;
                 this.forgotPasswordEmailSent = false;
-                this.forgotPasswordError.message = /\d{1}:\d{2}/.test(error.message)? `Подождите ещё ${error.message}` : 'Пользователя с таким email не существует';
+                this.alert.error(/\d{1}:\d{2}/.test(error.message)? `Подождите ещё ${error.message}` : 'Пользователя с таким email не существует');
             });
     }
 

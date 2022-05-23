@@ -1,0 +1,25 @@
+<div class="transaction">
+    <div class="transaction__icon">
+        <span class="transaction__icon-img">
+            <img *ngIf="target" [src]="target.icon" alt="transactionIcon">
+        </span>       
+    </div>
+    <div class="transaction__info">
+        <span class="transaction__info-top-bar">
+            <div class="transaction__info-top-bar-item-left">
+                <span class="transaction__info__name" *ngIf="target">{{ target.name }} </span>
+                <!-- better pipe here is needed -->
+                <div class="transaction__info__target">
+                    <span class="transaction__info__date" *ngIf="transaction.timestamp">{{ transaction.timestamp.toDate() | date : 'd MMM, y, H:mm:ss'}} </span>
+                    <span class="transaction__info__target-number" *ngIf="target">{{ target.number | cardNumber : true }} </span>
+                </div>
+                
+            </div>
+            <div class="transaction__info-top-bar-item-right">
+                <span class="transaction__info__action" [class.withdrawal]="isWithdrawal">{{ isWithdrawal ? 'Перевод' : 'Пополнение'}}</span>
+                <span class="transaction__info__amount" [class.withdrawal]="isWithdrawal">{{ isWithdrawal ? '-' : '+'}}{{ transaction.amount }}₽</span>
+            </div>
+        </span>
+
+    </div>
+</div>

@@ -5,9 +5,11 @@ import { BehaviorSubject, filter, takeUntil } from 'rxjs';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
 import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { DestroyService } from 'src/app/services/destoyService/destroy.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
 import { ICard } from 'src/app/services/firestore/interfaces/Card';
+import { TransactionType } from 'src/app/services/firestore/interfaces/transaction';
 import { IUser } from 'src/app/services/firestore/interfaces/User';
 
 @Component({
@@ -26,8 +28,6 @@ export class AccountFastSendComponent implements OnInit {
     public isCardNumberEnrolled: boolean = false;
     public moneyAmountForm: FormGroup = FormGenerator.getInstance().getMoneyAmountForm();
     public isMoneySended: boolean = false;
-    public successMessage: string | undefined;
-    public errorMessage: string | undefined;
     public isEnoughMoneyError: string | undefined;
     public moneyReceiver: string = '';
     public defaultCardOverride: string | undefined = undefined;
@@ -36,10 +36,11 @@ export class AccountFastSendComponent implements OnInit {
         public fs: FirestoreService,
         public router: Router,
         public activatedRoute: ActivatedRoute,
+        public alert: AlertService,
         private _destroy$: DestroyService,
     ) { 
         if (this.router.getCurrentNavigation()?.extras.state) {
-            this.router.getCurrentNavigation()?.extras.state!['defaultCardOverride'];
+            this.defaultCardOverride = this.router.getCurrentNavigation()?.extras.state!['defaultCardOverride'];
         }
     }
 
@@ -78,17 +79,15 @@ export class AccountFastSendComponent implements OnInit {
 
     public sendMoney(): void {
         this.isMoneySended = true;
-        this.fs.sendMoney((this.moneyAmountForm.get('card')?.value as BehaviorSubject<ICard | null>).value!.cardNumber, this.sendMoneyByCardNumberForm.get('cardNumber')?.value, this.moneyAmountForm.get('amount')?.value).then(() => {
-            this.successMessage = 'Перевод выполнен успешно';
-            this.errorMessage = undefined;
+        this.fs.sendMoney((this.moneyAmountForm.get('card')?.value as BehaviorSubject<ICard | null>).value!.cardNumber, this.sendMoneyByCardNumberForm.get('cardNumber')?.value, this.moneyAmountForm.get('amount')?.value, TransactionType.to).then(() => {
+            this.alert.success('Перевод выполнен успешно');
             setTimeout(() => {
                 this.isMoneySended = false;
                 this.isCardNumberEnrolled = false;
                 this.resetForms();
-                this.successMessage = undefined;
             }, 1000);
         }).catch((error: Error) => {
-            this.errorMessage = error.message;
+            this.alert.error(error.message);
             this.isMoneySended = false;
         });
     }
@@ -109,7 +108,6 @@ export class AccountFastSendComponent implements OnInit {
     public cancel(): void {
         this.isMoneySended = false;
         this.isCardNumberEnrolled = false;
-        this.errorMessage = undefined;
         this.resetForms();
     }
 

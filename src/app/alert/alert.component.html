@@ -1,0 +1,6 @@
+<div class="container" *ngIf="alerts.length !== 0">
+    <div  *ngFor="let alert of alerts" [@contentSlide]="alert.fade ? 'collapsed' : 'expanded'" [class]="alert.type">
+        <span>{{ alert.message }}</span>
+    </div>
+</div>
+

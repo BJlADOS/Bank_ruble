@@ -4,6 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { filter, takeUntil } from 'rxjs';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
 import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { DestroyService } from 'src/app/services/destoyService/destroy.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
 import { IUser } from 'src/app/services/firestore/interfaces/User';
@@ -33,6 +34,7 @@ export class AccountProfileDataComponent implements OnInit {
     constructor(
         public fs: FirestoreService,
         public destroy$: DestroyService,
+        public alert: AlertService,
     ) { }
 
     public ngOnInit(): void {
@@ -48,11 +50,11 @@ export class AccountProfileDataComponent implements OnInit {
             this.isError = false;
             this.isUserDataFormDisabled = true;
             this.isSubmitDisabled = false;
-            this.isUserDataEdited = true;
+            this.alert.success('Сохранено!');
         }).catch((er: Error) => {
             this.isError = true;
             this.isSubmitDisabled = false;
-            this.errorMessage = er.message;
+            this.alert.error(er.message);
         });
 
     }

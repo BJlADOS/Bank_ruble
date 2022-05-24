@@ -1,5 +1,5 @@
 import { ApplicationRef, ComponentRef, Injectable, Type } from '@angular/core';
-import { ModalContainerComponent } from 'src/app/account/components/modal-container/modal-container.component';
+import { ModalContainerComponent } from 'src/app/components/modal-container/modal-container.component';
 import { Modal } from 'src/app/classes/modal/modal';
 import { ModalRef } from 'src/app/classes/modal/modalRef';
 

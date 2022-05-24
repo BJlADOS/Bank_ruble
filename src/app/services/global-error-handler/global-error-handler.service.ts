@@ -9,6 +9,11 @@ export class GlobalErrorHandlerService implements ErrorHandler {
     ) { }
 
     public handleError(error: Error): void {
-        this.alert.error(error.message);
+        if (/[А-Яа-я]+/.test(error.message)) {
+            this.alert.error(error.message);
+        } else {
+            throw error;
+        }
+
     }
 }

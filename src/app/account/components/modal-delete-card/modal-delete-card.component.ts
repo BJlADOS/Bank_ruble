@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { textAppears } from 'src/app/animations/text-appears/text-appers';
+import { textAppears } from 'src/app/animations/text-appears/text-appears';
 import { Modal } from 'src/app/classes/modal/modal';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';

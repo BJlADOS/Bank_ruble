@@ -2,9 +2,9 @@ import { trigger, transition, style, animate, state, AnimationStyleMetadata } fr
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs';
-import { Alert } from '../classes/alert/alert';
-import { AlertService } from '../services/alert/alert.service';
-import { DestroyService } from '../services/destoyService/destroy.service';
+import { Alert } from '../../classes/alert/alert';
+import { AlertService } from '../../services/alert/alert.service';
+import { DestroyService } from '../../services/destoyService/destroy.service';
 
 @Component({
     selector: 'app-alert',

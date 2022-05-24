@@ -21,11 +21,10 @@ import { ModalDeleteCardComponent } from '../modal-delete-card/modal-delete-card
 export class AccountCardInfoComponent implements OnInit, OnDestroy {
 
     public card$!: Observable<ICard | null>;
-    public errorMessage: string | undefined;
     public isCardNumberHidden: boolean = true;
     public isCvvHidden: boolean = true;
     public moneyReceiver: string = '';
-    public isLoading: boolean = false;
+    public isLoading: boolean = true;
     public history: Array<DocumentReference<DocumentData>> = [];
     public transactions: ITransaction[] = [];
 
@@ -43,13 +42,18 @@ export class AccountCardInfoComponent implements OnInit, OnDestroy {
             const cardIdFormRoute: string = paramMap.get('id') as string;
             this.isCardNumberHidden = true;
             this.isCvvHidden = true;
-            this.errorMessage = undefined;
             this.transactions = [];
             this.history = [];
+            this.isLoading = true;
             this.card$ = this._fs.getUserCardById(cardIdFormRoute);
             this._fs.getCardHistory(cardIdFormRoute).pipe(takeUntil(this._destroy$)).subscribe((data: Array<DocumentReference<DocumentData>>) => {
                 this.history = data;
-                this.checkPosition();
+                if(data.length > 0) {
+                    this.isLoading = true;
+                    this.checkPosition();
+                } else {
+                    this.isLoading = false;
+                }            
             });
         });
         window.addEventListener('scroll', this.throttle(this.checkPosition.bind(this), 250));
@@ -106,7 +110,6 @@ export class AccountCardInfoComponent implements OnInit, OnDestroy {
 
         const position: number = scrolled + screenHeight;
         if (position >= threshold && this.history.length !== this.transactions.length) {
-            this.isLoading = true;
             const transactions: ITransaction[] = await this._fs.loadTransactions(this.history, this.transactions.length, 10);
             for (const transaction of transactions) {
                 this.transactions.push(transaction);

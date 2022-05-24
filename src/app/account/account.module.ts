@@ -27,6 +27,7 @@ import { AccountSendSelfComponent } from './components/account-send-self/account
 import { ModalDeleteCardComponent } from './components/modal-delete-card/modal-delete-card.component';
 import { CardHistoryItemComponent } from './components/card-history-item/card-history-item.component';
 import localeRU from '@angular/common/locales/ru';
+import { SkeletonDirective } from '../Directives/skeleton/skeleton.directive';
 
 registerLocaleData(localeRU, 'ru');
 @NgModule({
@@ -54,6 +55,7 @@ registerLocaleData(localeRU, 'ru');
         AccountSendSelfComponent,
         ModalDeleteCardComponent,
         CardHistoryItemComponent,
+        SkeletonDirective,
     ],
     imports: [
         CommonModule,
@@ -64,6 +66,8 @@ registerLocaleData(localeRU, 'ru');
     bootstrap: [AccountComponent],
     providers: [
         { provide: LOCALE_ID, useValue: 'ru' }
+    ],
+    exports: [
     ]
 })
 export class AccountModule { }

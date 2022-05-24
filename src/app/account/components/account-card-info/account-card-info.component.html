@@ -49,13 +49,9 @@
         </button>
     </div>
 </div>
-<div class="error" *ngIf="errorMessage">
-    {{errorMessage}}
-</div>
 <div class="history" *ngIf="card$ | async as card">
     <h2>История платежей</h2>
-    <app-card-history-item *ngFor="let transaction of transactions" [cardName]="card.name" [cardNumber]="card.cardNumber" [transaction]="transaction"></app-card-history-item>
-</div>
-<div *ngIf="isLoading" class="loader">
-    
+    <div class="history-transactions" *skeleton="isLoading; height: '52px' size: 5">
+        <app-card-history-item *ngFor="let transaction of transactions" [cardName]="card.name" [cardNumber]="card.cardNumber" [transaction]="transaction"></app-card-history-item>
+    </div>
 </div>

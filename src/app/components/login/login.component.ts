@@ -7,8 +7,8 @@ import { CustomError } from 'src/app/classes/CustomError/CustomError';
 import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';
 import { AuthService } from 'src/app/services/authService/auth.service';
 import { State } from 'src/app/shared/types/State';
-import { AlertService } from '../services/alert/alert.service';
-import { DestroyService } from '../services/destoyService/destroy.service';
+import { AlertService } from '../../services/alert/alert.service';
+import { DestroyService } from '../../services/destoyService/destroy.service';
 
 @Component({
     selector: 'app-login',

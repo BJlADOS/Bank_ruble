@@ -1,6 +1,6 @@
 import { ComponentRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ModalContainerComponent } from 'src/app/account/components/modal-container/modal-container.component';
+import { ModalContainerComponent } from 'src/app/components/modal-container/modal-container.component';
 import { Modal } from './modal';
 
 export class ModalRef {

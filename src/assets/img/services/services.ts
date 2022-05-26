@@ -21,25 +21,4 @@ export const services: Service[] = [
         iconAlt: 'Вклады',
         link: ''
     },
-    {
-        name: 'Банковские переводы',
-        description: 'Переводите деньги другим людям',
-        icon: 'assets/img/services/1.png',
-        iconAlt: 'Банковские переводы',
-        link: '/account/payments'
-    },
-    {
-        name: 'Банковские переводы',
-        description: 'Переводите деньги другим людям',
-        icon: 'assets/img/services/1.png',
-        iconAlt: 'Банковские переводы',
-        link: '/account/payments'
-    },
-    {
-        name: 'Банковские переводы',
-        description: 'Переводите деньги другим людям',
-        icon: 'assets/img/services/1.png',
-        iconAlt: 'Банковские переводы',
-        link: '/account/payments'
-    },
 ];

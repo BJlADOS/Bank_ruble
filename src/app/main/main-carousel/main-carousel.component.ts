@@ -16,6 +16,9 @@ import { images } from 'src/assets/img/carousel/images';
 })
 export class MainCarouselComponent implements OnInit, AfterViewInit, OnDestroy {
 
+    // TODO: Rework component (works awful for this moment)
+
+    //Disabled part of funtions, works wrong
     public images!: Array<{src: string}>;
     public currentIndex: number = 0;
     public delay: number = 5000;

@@ -1,0 +1,19 @@
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #666666;
+    &-logo {
+        display: flex;
+        justify-content: center;
+    }
+
+    &-links {
+        a {
+            color: #26b909;
+            &:hover {
+                color: #288525;
+            }
+        }
+    }
+}

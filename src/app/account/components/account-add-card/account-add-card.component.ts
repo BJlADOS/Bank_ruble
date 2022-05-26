@@ -1,7 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Alert } from 'src/app/classes/alert/alert';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
 import { CardType } from 'src/app/services/firestore/types/card-type';

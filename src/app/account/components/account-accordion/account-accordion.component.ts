@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, ContentChildren, OnInit, QueryList } from '@angular/core';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { AccountAccordionItemDirective } from '../../directives/item/account-accordion-item.directive';
@@ -8,7 +7,7 @@ import { AccountAccordionItemDirective } from '../../directives/item/account-acc
     templateUrl: './account-accordion.component.html',
     styleUrls: ['./account-accordion.component.scss'],
     animations: [
-        contentExpansion
+        contentExpansion,
     ]
 })
 export class AccountAccordionComponent {

@@ -3,10 +3,10 @@ import { FormGroup } from '@angular/forms';
 import { filter, takeUntil } from 'rxjs';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
-import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';
+import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
 import { AlertService } from 'src/app/services/alert/alert.service';
-import { AuthService } from 'src/app/services/authService/auth.service';
-import { DestroyService } from 'src/app/services/destoyService/destroy.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { DestroyService } from 'src/app/services/destoy/destroy.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
 import { IUser } from 'src/app/services/firestore/interfaces/User';
 

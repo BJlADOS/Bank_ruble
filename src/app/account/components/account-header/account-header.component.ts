@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterEvent, Scroll, UrlSegment } from '@angular/router';
 import { filter, takeUntil } from 'rxjs';
 import { IBreadcrumb } from 'src/app/interfaces/breadcrumb/breadcrumb';
-import { AuthService } from 'src/app/services/authService/auth.service';
-import { DestroyService } from 'src/app/services/destoyService/destroy.service';
-import { AccountHeaderBreadcrumbComponent } from '../account-header-breadcrumb/account-header-breadcrumb.component';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { DestroyService } from 'src/app/services/destoy/destroy.service';
 
 @Component({
     selector: 'app-account-header',

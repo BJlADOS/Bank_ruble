@@ -4,8 +4,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Observable, takeUntil } from 'rxjs';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { ModalRef } from 'src/app/classes/modal/modalRef';
-import { AlertService } from 'src/app/services/alert/alert.service';
-import { DestroyService } from 'src/app/services/destoyService/destroy.service';
+import { DestroyService } from 'src/app/services/destoy/destroy.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
 import { ICard } from 'src/app/services/firestore/interfaces/Card';
 import { ITransaction } from 'src/app/services/firestore/interfaces/transaction';
@@ -34,7 +33,6 @@ export class AccountCardInfoComponent implements OnInit, OnDestroy {
         private _fs: FirestoreService,
         private _destroy$: DestroyService,
         private _modalServise: ModalService,
-        private _alert: AlertService,
     ) { }
 
     public ngOnInit(): void {

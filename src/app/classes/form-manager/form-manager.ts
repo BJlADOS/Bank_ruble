@@ -1,7 +1,6 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { ICard } from 'src/app/services/firestore/interfaces/Card';
-import { CustomValidators } from '../CustomValidators/custom-validators';
 
 export class FormManager {
     private static _formGenerator: FormManager;

@@ -1,8 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component } from '@angular/core';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
-import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';
-import { FirestoreService } from 'src/app/services/firestore/firestore.service';
 
 @Component({
     selector: 'app-account-main',
@@ -12,15 +9,9 @@ import { FirestoreService } from 'src/app/services/firestore/firestore.service';
         contentExpansion,
     ]
 })
-export class AccountMainComponent implements OnInit {
+export class AccountMainComponent {
 
-    constructor(
-        private _fs: FirestoreService
-    ) { }
+    constructor() { }
 
-    public ngOnInit(): void {
-        let a: number = 0;
-        a++;
-    }
 
 }

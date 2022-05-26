@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, filter, Observable, takeUntil } from 'rxjs';
-import { DestroyService } from 'src/app/services/destoyService/destroy.service';
+import { DestroyService } from 'src/app/services/destoy/destroy.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
 import { ICard } from 'src/app/services/firestore/interfaces/Card';
 import { IUser } from 'src/app/services/firestore/interfaces/User';

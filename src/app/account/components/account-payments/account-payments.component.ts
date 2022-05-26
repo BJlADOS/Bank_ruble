@@ -1,7 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Data, Router } from '@angular/router';
-import { filter, takeUntil } from 'rxjs';
-import { DestroyService } from 'src/app/services/destoyService/destroy.service';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-account-payments',

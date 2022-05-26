@@ -28,6 +28,7 @@ import { ModalDeleteCardComponent } from './components/modal-delete-card/modal-d
 import { CardHistoryItemComponent } from './components/card-history-item/card-history-item.component';
 import localeRU from '@angular/common/locales/ru';
 import { SkeletonDirective } from '../Directives/skeleton/skeleton.directive';
+import { ModalService } from '../services/modal/modal.service';
 
 registerLocaleData(localeRU, 'ru');
 @NgModule({
@@ -65,9 +66,11 @@ registerLocaleData(localeRU, 'ru');
     ],
     bootstrap: [AccountComponent],
     providers: [
-        { provide: LOCALE_ID, useValue: 'ru' }
+        { provide: LOCALE_ID, useValue: 'ru' },
+        ModalService,
     ],
     exports: [
+        SkeletonDirective,
     ]
 })
 export class AccountModule { }

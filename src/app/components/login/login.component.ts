@@ -1,14 +1,13 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
-import { filter, takeUntil } from 'rxjs';
-import { CustomError } from 'src/app/classes/CustomError/CustomError';
-import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';
-import { AuthService } from 'src/app/services/authService/auth.service';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { takeUntil } from 'rxjs';
+import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { State } from 'src/app/shared/types/State';
 import { AlertService } from '../../services/alert/alert.service';
-import { DestroyService } from '../../services/destoyService/destroy.service';
+import { DestroyService } from '../../services/destoy/destroy.service';
 
 @Component({
     selector: 'app-login',

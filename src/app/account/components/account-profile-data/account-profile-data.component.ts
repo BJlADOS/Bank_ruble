@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { filter, takeUntil } from 'rxjs';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
-import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';
+import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
 import { AlertService } from 'src/app/services/alert/alert.service';
-import { DestroyService } from 'src/app/services/destoyService/destroy.service';
+import { DestroyService } from 'src/app/services/destoy/destroy.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
 import { IUser } from 'src/app/services/firestore/interfaces/User';
 

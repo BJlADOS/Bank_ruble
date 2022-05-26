@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { Modal } from 'src/app/classes/modal/modal';
 
 @Component({

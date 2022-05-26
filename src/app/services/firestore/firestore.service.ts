@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 import { Auth, updateEmail, updateProfile, User } from '@angular/fire/auth';
 import { addDoc, arrayRemove, arrayUnion, deleteDoc, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, onSnapshot, query, runTransaction, setDoc, where } from '@angular/fire/firestore';
 import { FormGroup } from '@angular/forms';
-import { collection, FieldValue, getDocs, Query, QueryDocumentSnapshot, QuerySnapshot, Timestamp, Transaction, Unsubscribe, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, Query, QueryDocumentSnapshot, QuerySnapshot, Timestamp, Transaction, Unsubscribe, updateDoc } from 'firebase/firestore';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { CardGenerator } from 'src/app/classes/card-generator/card-generator';
-import { cachedDataVersionTag } from 'v8';
 import { ICard } from './interfaces/Card';
 import { IDeletedCard } from './interfaces/deleted-card';
 import { ITransaction, ITransactionTarget, TransactionType } from './interfaces/transaction';
@@ -63,6 +62,8 @@ export class FirestoreService {
                 if (!this._user$.value && userData) {
                     this.subscribeToCardsChanges(userData.cards);
                 } else if (this._user$.value!.defaultCard === userData.defaultCard && !this.isAllcardsBanned()) {
+                    this.subscribeToCardsChanges(userData.cards);
+                } else if (this._user$.value!.cards.length !== userData.cards.length) {
                     this.subscribeToCardsChanges(userData.cards);
                 }
                 this._user$.next(userData);

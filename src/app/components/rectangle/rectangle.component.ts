@@ -1,5 +1,4 @@
-import { trigger, transition, style, animate } from '@angular/animations';
-import { Component, ElementRef, HostBinding, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, HostBinding, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-rectangle',
@@ -16,7 +15,6 @@ export class RectangleComponent implements OnInit {
 
     constructor(
         private _host: ElementRef<HTMLElement>,
-        private _renderer: Renderer2,
     ) { }
 
     public ngOnInit(): void {

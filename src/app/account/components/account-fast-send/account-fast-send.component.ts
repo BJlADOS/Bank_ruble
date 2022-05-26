@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ActivatedRoute, Data, Router } from '@angular/router';
-import { BehaviorSubject, filter, takeUntil } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BehaviorSubject, takeUntil } from 'rxjs';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
-import { FormGenerator } from 'src/app/classes/FormGenerator/form-generator';
+import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
 import { AlertService } from 'src/app/services/alert/alert.service';
-import { DestroyService } from 'src/app/services/destoyService/destroy.service';
+import { DestroyService } from 'src/app/services/destoy/destroy.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
 import { ICard } from 'src/app/services/firestore/interfaces/Card';
 import { TransactionType } from 'src/app/services/firestore/interfaces/transaction';

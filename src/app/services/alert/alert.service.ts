@@ -1,11 +1,8 @@
-import { isNull } from '@angular/compiler/src/output/output_ast';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, filter, Observable, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Alert, AlertType } from 'src/app/classes/alert/alert';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class AlertService {
 
     private _subject$: Subject<Alert> = new Subject<Alert>();

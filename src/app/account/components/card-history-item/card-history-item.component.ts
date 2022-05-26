@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
-import { ICard } from 'src/app/services/firestore/interfaces/Card';
 import { ITransaction, ITransactionTarget } from 'src/app/services/firestore/interfaces/transaction';
 
 @Component({

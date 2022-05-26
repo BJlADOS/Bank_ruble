@@ -3,9 +3,7 @@ import { ModalContainerComponent } from 'src/app/components/modal-container/moda
 import { Modal } from 'src/app/classes/modal/modal';
 import { ModalRef } from 'src/app/classes/modal/modalRef';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ModalService {
 
     private _modalContainer!: HTMLDivElement;

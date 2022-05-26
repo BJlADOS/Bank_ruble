@@ -13,7 +13,7 @@ export class SkeletonDirective implements OnChanges {
     @Input() public skeletonClassName: string | undefined;
 
     constructor(
-        private _template: TemplateRef<any>,
+        private _template: TemplateRef<HTMLElement>,
         private _viewContainer: ViewContainerRef
     ) { }
     public ngOnChanges(changes: SimpleChanges): void {
